@@ -353,26 +353,52 @@
     margin-bottom: 22px;
   }
   .die-face{
+    width: 112px;
     display: flex; flex-direction: column; align-items: center; gap: 8px;
   }
   .die-face .shape{
-    width: 58px; height: 58px;
+    position: relative;
+    width: 66px; height: 66px;
     display: flex; align-items: center; justify-content: center;
-    background: var(--bg-panel-2);
-    border: 2px solid var(--border);
-    border-radius: 10px;
+    background: linear-gradient(145deg, var(--blood-bright), var(--blood));
+    border: none;
+    border-radius: 0;
     font-family: 'Oswald', sans-serif;
-    font-size: 1.4rem;
-    color: var(--text);
+    font-size: 1.5rem;
+    line-height: 1;
+    color: #f2e3d0;
+    text-shadow: 0 1px 2px rgba(0,0,0,.45);
+    filter: drop-shadow(0 0 1px var(--bone-bright)) drop-shadow(0 0 3px rgba(224,189,127,.7));
     transform: rotate(-3deg);
-    animation: dieDrop .35s ease;
+    transform-style: preserve-3d;
+    perspective: 500px;
+    animation: dieRoll3d 1.6s cubic-bezier(.2,.8,.25,1);
   }
-  .die-face:nth-child(even) .shape{ transform: rotate(3deg); }
-  @keyframes dieDrop{
-    from{ opacity: 0; transform: translateY(-14px) rotate(0deg) scale(.6); }
-    to{ opacity: 1; transform: translateY(0) rotate(-3deg) scale(1); }
+  .die-face .shape.d4{ clip-path: polygon(50% 5%, 95% 94%, 5% 94%); padding-top: 10px; }
+  .die-face .shape.d6{ width: 58px; height: 58px; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+  .die-face .shape.d8{ clip-path: polygon(50% 4%, 96% 50%, 50% 96%, 4% 50%); }
+  .die-face .shape.d10{ clip-path: polygon(50% 4%, 96% 29%, 80% 96%, 20% 96%, 4% 29%); }
+  .die-face .shape.d12{ clip-path: polygon(27% 4%, 73% 4%, 96% 50%, 73% 96%, 27% 96%, 4% 50%); }
+  .die-face .shape.d20{ clip-path: polygon(50% 4%, 87% 22%, 96% 68%, 68% 96%, 32% 96%, 4% 68%, 13% 22%); }
+  .die-face:nth-child(even) .shape{ animation-name: dieRoll3dReverse; }
+  .die-face .shape::before,
+  .die-face .shape::after{
+    display:none;
+  }
+  @keyframes dieRoll3d{
+    0%{ opacity: 0; transform: translateY(-14px) rotateX(0deg) rotateY(0deg) rotateZ(-3deg) scale(.8); }
+    45%{ opacity: 1; transform: translateY(0) rotateX(180deg) rotateY(140deg) rotateZ(7deg) scale(1.04); }
+    100%{ transform: translateY(0) rotateX(360deg) rotateY(360deg) rotateZ(-3deg) scale(1); }
+  }
+  @keyframes dieRoll3dReverse{
+    0%{ opacity: 0; transform: translateY(-14px) rotateX(0deg) rotateY(0deg) rotateZ(3deg) scale(.8); }
+    45%{ opacity: 1; transform: translateY(0) rotateX(-180deg) rotateY(-140deg) rotateZ(-7deg) scale(1.04); }
+    100%{ transform: translateY(0) rotateX(-360deg) rotateY(-360deg) rotateZ(3deg) scale(1); }
   }
   .die-face .tag{
+    width: 100%;
+    text-align: center;
+    white-space: nowrap;
     font-size: .68rem; color: var(--text-faint); letter-spacing: .03em;
   }
   .modal-total{
@@ -570,13 +596,13 @@
 
   function doRoll(char, pericia, bonusCount, bonusDie){
     const attrDie = char.atributos[pericia.attr];
-    const dice = [ { label: ATTR_LABEL[pericia.attr]+' '+attrDie, val: rollDie(attrDie) },
-                   { label: pericia.nome+' '+pericia.dado, val: rollDie(pericia.dado) } ];
-    for(let i=0;i<bonusCount;i++){ dice.push({ label:'Bônus '+bonusDie, val: rollDie(bonusDie) }); }
+    const dice = [ { label: ATTR_LABEL[pericia.attr]+' '+attrDie, sides: parseInt(attrDie.slice(1)), val: rollDie(attrDie) },
+             { label: pericia.nome+' '+pericia.dado, sides: parseInt(pericia.dado.slice(1)), val: rollDie(pericia.dado) } ];
+    for(let i=0;i<bonusCount;i++){ dice.push({ label:'Bônus '+bonusDie, sides: parseInt(bonusDie.slice(1)), val: rollDie(bonusDie) }); }
     const vals = dice.map(d=>d.val).sort((a,b)=>b-a);
     const sum = vals.length<=3 ? vals.reduce((a,b)=>a+b,0) : vals[0]+vals[1]+vals[2];
     const entry = { id: uid(), pericia: pericia.nome, dice, sum, ts: Date.now() };
-    char.log = [entry];
+    char.log = [entry, ...(char.log || [])].slice(0, 5);
     return entry;
   }
 
@@ -876,26 +902,47 @@
       wrap.innerHTML = '<div class="log-empty">Nenhuma rolagem ainda. Clique em "Rolar" em uma perícia.</div>';
       return;
     }
-    const e = c.log[0];
-    const diceStr = e.dice.map(d => `${d.label} = ${d.val}`).join(' &nbsp;+&nbsp; ');
-    wrap.innerHTML = `<div class="log-entry">
-      <span class="who"><strong>${escapeHtml(e.pericia)}</strong> — ${diceStr} &nbsp;=&nbsp; <strong>${e.sum}</strong></span>
-    </div>`;
+    wrap.innerHTML = c.log.slice(0, 5).map(e => {
+      const diceStr = e.dice.map(d => `${d.label} = ${d.val}`).join(' &nbsp;+&nbsp; ');
+      return `<div class="log-entry">
+        <span class="who"><strong>${escapeHtml(e.pericia)}</strong> — ${diceStr} &nbsp;=&nbsp; <strong>${e.sum}</strong></span>
+      </div>`;
+    }).join('');
   }
 
   // ---------- Roll result modal ----------
+  let rollAnimationTimer;
+
   function showRollModal(entry){
+    clearInterval(rollAnimationTimer);
     document.getElementById('modalPericia').textContent = entry.pericia;
     document.getElementById('modalDice').innerHTML = entry.dice.map(d => `
       <div class="die-face">
-        <div class="shape">${d.val}</div>
+        <div class="shape d${d.sides}" data-final="${d.val}" data-sides="${d.sides}">${d.val}</div>
         <span class="tag">${escapeHtml(d.label)}</span>
       </div>
     `).join('');
-    document.getElementById('modalTotal').textContent = entry.sum;
+    document.getElementById('modalTotal').textContent = '...';
     document.getElementById('rollModal').classList.add('show');
+    const shapes = [...document.querySelectorAll('#modalDice .shape')];
+    const startedAt = Date.now();
+    rollAnimationTimer = setInterval(() => {
+      const elapsed = Date.now() - startedAt;
+      shapes.forEach(shape => {
+        const sides = parseInt(shape.dataset.sides);
+        const finalValue = parseInt(shape.dataset.final);
+        shape.textContent = elapsed >= 1500 ? finalValue : rollDie('d' + sides);
+      });
+      if(elapsed >= 1500){
+        clearInterval(rollAnimationTimer);
+        document.getElementById('modalTotal').textContent = entry.sum;
+      }
+    }, 90);
   }
-  function hideRollModal(){ document.getElementById('rollModal').classList.remove('show'); }
+  function hideRollModal(){
+    clearInterval(rollAnimationTimer);
+    document.getElementById('rollModal').classList.remove('show');
+  }
   document.getElementById('modalClose').addEventListener('click', hideRollModal);
   document.getElementById('rollModal').addEventListener('click', (e) => {
     if(e.target.id === 'rollModal') hideRollModal();

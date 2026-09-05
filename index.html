@@ -203,6 +203,19 @@
   }
   .pip.on.pv{ background: var(--blood-bright); border-color: var(--blood-bright); }
   .pip.on.pd{ background: var(--bone); border-color: var(--bone); }
+  .impeto-bar{ display:flex; align-items:center; gap:8px; }
+  .impeto-pips{ display:flex; gap:6px; }
+  .impeto-pip{
+    width: 28px; height: 22px; border-radius: 3px;
+    border: 1px solid var(--bone);
+    background: var(--bg-input);
+    cursor: pointer;
+    transition: background .15s, box-shadow .15s;
+  }
+  .impeto-pip:hover{ box-shadow: 0 0 8px rgba(224,189,127,.35); }
+  .impeto-pip.on{ background: var(--blood-bright); border-color: var(--blood-bright); }
+  .impeto-actions{ display:flex; gap:6px; margin-top:8px; }
+  .impeto-help{ color: var(--text-faint); font-size:.78rem; margin:8px 0 0; line-height:1.35; }
 
   /* Habilidades */
   .hab{ margin-bottom: 10px; border-left: 2px solid var(--border); padding-left: 10px; }
@@ -431,6 +444,7 @@
       perfil: '', ocupacao: '', nivel: 1,
       pv: { atual: 10, max: 10 },
       pd: { atual: 10, max: 10 },
+      impeto: 0,
       atributos: { fisico:'d6', mente:'d6', emocao:'d6' },
       pericias: PERICIAS_BASE.map(([nome,attr]) => ({ nome, attr, dado:'d4' })),
       habilidades: [],
@@ -672,6 +686,22 @@
               </div>
               <div class="pips" id="pdPips"></div>
             </div>
+            ${c.perfil.trim().toLowerCase() === 'executor' ? `
+              <div class="resource">
+                <div class="resource-head">
+                  <span class="label">Ímpeto</span>
+                  <span class="nums"><span id="impetoCount">${c.impeto || 0}</span> / 3</span>
+                </div>
+                <div class="impeto-bar">
+                  <div class="impeto-pips" id="impetoPips" aria-label="Barra de ímpeto"></div>
+                </div>
+                <div class="impeto-actions">
+                  <button class="btn small" id="markImpeto">Marcar falha</button>
+                  <button class="btn small" id="clearImpeto">Limpar</button>
+                </div>
+                <p class="impeto-help">Preencha um espaço ao falhar em um teste. Apague espaços para usar os benefícios de Ímpeto.</p>
+              </div>
+            ` : ''}
           </div>
 
           <div class="panel">
@@ -746,6 +776,34 @@
       });
     }
     renderPips();
+
+    if(c.perfil.trim().toLowerCase() === 'executor'){
+      function renderImpeto(){
+        const wrap = document.getElementById('impetoPips');
+        wrap.innerHTML = '';
+        for(let i=1; i<=3; i++){
+          const pip = document.createElement('button');
+          pip.type = 'button';
+          pip.className = 'impeto-pip' + (i <= (c.impeto || 0) ? ' on' : '');
+          pip.setAttribute('aria-label', `${i} espaço${i > 1 ? 's' : ''} de ímpeto`);
+          pip.addEventListener('click', () => {
+            c.impeto = i === c.impeto ? i - 1 : i;
+            renderImpeto();
+          });
+          wrap.appendChild(pip);
+        }
+        document.getElementById('impetoCount').textContent = c.impeto || 0;
+      }
+      document.getElementById('markImpeto').addEventListener('click', () => {
+        c.impeto = Math.min(3, (c.impeto || 0) + 1);
+        renderImpeto();
+      });
+      document.getElementById('clearImpeto').addEventListener('click', () => {
+        c.impeto = 0;
+        renderImpeto();
+      });
+      renderImpeto();
+    }
 
     // Habilidades
     function renderHabs(){

@@ -21,6 +21,8 @@
     --blood-bright: #c8402f;
     --bone: #c9a463;
     --bone-bright: #e0bd7f;
+    --die-gold: #e0bd7f;
+    --theme-glow: rgba(125,31,31,.10);
     --fail: #b3372c;
     --shadow: rgba(0,0,0,.55);
   }
@@ -37,7 +39,7 @@
 
   body{
     background-image:
-      radial-gradient(ellipse at 20% 0%, rgba(125,31,31,.10), transparent 55%),
+      radial-gradient(ellipse at 20% 0%, var(--theme-glow), transparent 55%),
       radial-gradient(ellipse at 90% 100%, rgba(201,164,99,.06), transparent 50%),
       repeating-linear-gradient(0deg, rgba(255,255,255,.012) 0px, transparent 1px, transparent 2px);
   }
@@ -125,10 +127,47 @@
   }
   .tab-add:hover{ color: var(--bone-bright); border-color: var(--bone); }
 
+  #sheetRoot[data-theme="azul"],
+  .modal-overlay[data-theme="azul"],
+  :root[data-theme="azul"]{
+    --blood: #24518f;
+    --blood-bright: #3f7dcc;
+    --fail: #3f7dcc;
+    --bone: #2d65ac;
+    --bone-bright: #4f91ee;
+    --border: #263f64;
+    --border-soft: #1e304b;
+    --theme-glow: rgba(36,81,143,.16);
+  }
+  #sheetRoot[data-theme="vermelho"],
+  .modal-overlay[data-theme="vermelho"],
+  :root[data-theme="vermelho"]{
+    --blood: #7d1f1f;
+    --blood-bright: #c8402f;
+    --fail: #b3372c;
+    --bone: #a52d25;
+    --bone-bright: #e35c43;
+    --border: #51241f;
+    --border-soft: #38201c;
+    --theme-glow: rgba(125,31,31,.14);
+  }
+  #sheetRoot[data-theme="verde"],
+  .modal-overlay[data-theme="verde"],
+  :root[data-theme="verde"]{
+    --blood: #315c25;
+    --blood-bright: #5d9d43;
+    --fail: #5d9d43;
+    --bone: #477f31;
+    --bone-bright: #78bd58;
+    --border: #304b28;
+    --border-soft: #24391f;
+    --theme-glow: rgba(49,92,37,.15);
+  }
+
   /* ---------- Identity bar ---------- */
   .identity{
     display: grid;
-    grid-template-columns: 2fr 1.4fr 1.4fr .7fr;
+    grid-template-columns: 2fr 1.25fr 1.25fr .7fr .9fr;
     gap: 12px;
     background: var(--bg-panel);
     border: 1px solid var(--border-soft);
@@ -153,6 +192,7 @@
   input:focus, select:focus, textarea:focus{
     outline: none; border-color: var(--bone);
   }
+  select[data-bind="cor"]{ color: var(--blood-bright); }
   .field.nome input{
     font-family:'Oswald', sans-serif;
     font-size: 1.1rem;
@@ -201,7 +241,7 @@
     background: var(--bg-input);
     cursor: pointer;
   }
-  .pip.on.pv{ background: var(--blood-bright); border-color: var(--blood-bright); }
+  .pip.on.pv{ background: #c8402f; border-color: #c8402f; }
   .pip.on.pd{ background: var(--bone); border-color: var(--bone); }
   .impeto-bar{ display:flex; align-items:center; gap:8px; }
   .impeto-pips{ display:flex; gap:6px; }
@@ -368,7 +408,7 @@
     line-height: 1;
     color: #f2e3d0;
     text-shadow: 0 1px 2px rgba(0,0,0,.45);
-    filter: drop-shadow(0 0 1px var(--bone-bright)) drop-shadow(0 0 3px rgba(224,189,127,.7));
+    filter: drop-shadow(0 0 1px var(--die-gold)) drop-shadow(0 0 3px rgba(224,189,127,.7));
     transform: rotate(-3deg);
     transform-style: preserve-3d;
     perspective: 500px;
@@ -463,11 +503,30 @@
 
   function uid(){ return Math.random().toString(36).slice(2,10); }
 
+  function perfilCor(perfil){
+    const nome = String(perfil || '').trim().toLowerCase();
+    if(nome === 'analista') return 'azul';
+    if(nome === 'executor') return 'vermelho';
+    if(nome === 'vigilante') return 'verde';
+    return 'vermelho';
+  }
+
+  function corDaFicha(ficha){
+    return ficha.cor && ficha.cor !== 'auto' ? ficha.cor : perfilCor(ficha.perfil);
+  }
+
+  function aplicarTema(ficha){
+    const tema = corDaFicha(ficha);
+    document.documentElement.dataset.theme = tema;
+    return tema;
+  }
+
   function novaFicha(nome){
     return {
       id: uid(),
       nome: nome || 'Novo Personagem',
       perfil: '', ocupacao: '', nivel: 1,
+      cor: 'auto',
       pv: { atual: 10, max: 10 },
       pd: { atual: 10, max: 10 },
       impeto: 0,
@@ -654,6 +713,7 @@
   function renderSheet(){
     const c = getActive();
     const root = document.getElementById('sheetRoot');
+    root.dataset.theme = aplicarTema(c);
     root.innerHTML = `
       <div class="identity">
         <div class="field nome">
@@ -667,6 +727,15 @@
         <div class="field">
           <label>Ocupação</label>
           <input type="text" data-bind="ocupacao" value="${escapeHtml(c.ocupacao)}">
+        </div>
+        <div class="field">
+          <label>Cor</label>
+          <select data-bind="cor">
+            <option value="auto" ${(!c.cor || c.cor === 'auto') ? 'selected' : ''}>Automática</option>
+            <option value="azul" ${c.cor === 'azul' ? 'selected' : ''}>Azul</option>
+            <option value="vermelho" ${c.cor === 'vermelho' ? 'selected' : ''}>Vermelho</option>
+            <option value="verde" ${c.cor === 'verde' ? 'selected' : ''}>Verde</option>
+          </select>
         </div>
         <div class="field">
           <label>Nível</label>
@@ -757,6 +826,13 @@
         const key = inp.dataset.bind;
         c[key] = inp.type === 'number' ? parseInt(inp.value)||0 : inp.value;
         if(key === 'nome') renderTabs();
+        if(key === 'perfil' || key === 'cor'){
+          root.dataset.theme = aplicarTema(c);
+          document.getElementById('rollModal').dataset.theme = corDaFicha(c);
+          if(key === 'perfil' && (!c.cor || c.cor === 'auto')){
+            root.dataset.theme = corDaFicha(c);
+          }
+        }
       });
     });
 
@@ -915,6 +991,7 @@
 
   function showRollModal(entry){
     clearInterval(rollAnimationTimer);
+    document.getElementById('rollModal').dataset.theme = corDaFicha(getActive());
     document.getElementById('modalPericia').textContent = entry.pericia;
     document.getElementById('modalDice').innerHTML = entry.dice.map(d => `
       <div class="die-face">

@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ordem Paranormal RPG II — Fichas & Rolagens</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Crimson+Pro:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+
+  :root{
+    --bg: #0a0908;
+    --bg-panel: #16130f;
+    --bg-panel-2: #1e1913;
+    --bg-input: #100d0a;
+    --border: #3a2f22;
+    --border-soft: #2a2119;
+    --text: #e8dfc9;
+    --text-dim: #a7987e;
+    --text-faint: #6e6353;
+    --blood: #7d1f1f;
+    --blood-bright: #c8402f;
+    --bone: #c9a463;
+    --bone-bright: #e0bd7f;
+    --fail: #b3372c;
+    --shadow: rgba(0,0,0,.55);
+  }
+
+  *{ box-sizing: border-box; }
+
+  html,body{
+    margin:0; padding:0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Crimson Pro', serif;
+    font-size: 16px;
+  }
+
+  body{
+    background-image:
+      radial-gradient(ellipse at 20% 0%, rgba(125,31,31,.10), transparent 55%),
+      radial-gradient(ellipse at 90% 100%, rgba(201,164,99,.06), transparent 50%),
+      repeating-linear-gradient(0deg, rgba(255,255,255,.012) 0px, transparent 1px, transparent 2px);
+  }
+
+  .wrap{ max-width: 1180px; margin: 0 auto; padding: 28px 20px 80px; }
+
+  /* ---------- Header ---------- */
+  header.top{
+    display:flex; align-items:center; gap:16px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 18px; margin-bottom: 22px;
+    flex-wrap: wrap;
+  }
+  .sigil{
+    width: 42px; height: 42px; flex-shrink:0;
+    color: var(--bone-bright);
+    filter: drop-shadow(0 0 6px rgba(201,164,99,.25));
+  }
+  header.top h1{
+    font-family:'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: 1.5rem;
+    letter-spacing: .03em;
+    color: var(--bone-bright);
+    margin: 0;
+    line-height: 1.1;
+  }
+  header.top p{
+    margin: 2px 0 0;
+    color: var(--text-faint);
+    font-size: .85rem;
+    font-style: italic;
+  }
+  .top-actions{ margin-left: auto; display:flex; gap: 8px; flex-wrap: wrap; }
+
+  button{
+    font-family: 'Crimson Pro', serif;
+    cursor: pointer;
+  }
+
+  .btn{
+    background: var(--bg-panel-2);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    padding: 7px 14px;
+    border-radius: 3px;
+    font-size: .82rem;
+    letter-spacing: .02em;
+    transition: border-color .15s, color .15s;
+  }
+  .btn:hover{ border-color: var(--bone-bright); color: var(--bone-bright); }
+  .btn.small{ padding: 4px 9px; font-size: .74rem; }
+  .btn.danger:hover{ border-color: var(--fail); color: var(--fail); }
+  .btn.primary{ border-color: var(--bone); color: var(--bone-bright); }
+
+  /* ---------- Tabs ---------- */
+  .tabs{ display:flex; gap:8px; flex-wrap: wrap; align-items:center; margin-bottom: 20px; }
+  .tab{
+    position: relative;
+    background: var(--bg-panel);
+    border: 1px solid var(--border-soft);
+    border-bottom: 2px solid transparent;
+    color: var(--text-dim);
+    padding: 8px 16px 7px;
+    font-family:'Oswald', sans-serif;
+    font-size: .85rem;
+    letter-spacing: .02em;
+    border-radius: 3px 3px 0 0;
+    display:flex; align-items:center; gap:8px;
+  }
+  .tab.active{
+    color: var(--bone-bright);
+    border-bottom-color: var(--blood-bright);
+    background: var(--bg-panel-2);
+  }
+  .tab .x{
+    opacity:.5; font-size: .95rem; line-height:1;
+    padding: 0 2px;
+  }
+  .tab .x:hover{ opacity:1; color: var(--fail); }
+  .tab-add{
+    background: transparent; border: 1px dashed var(--border);
+    color: var(--text-faint); padding: 8px 12px; border-radius: 3px;
+    font-size: .85rem;
+  }
+  .tab-add:hover{ color: var(--bone-bright); border-color: var(--bone); }
+
+  /* ---------- Identity bar ---------- */
+  .identity{
+    display: grid;
+    grid-template-columns: 2fr 1.4fr 1.4fr .7fr;
+    gap: 12px;
+    background: var(--bg-panel);
+    border: 1px solid var(--border-soft);
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-bottom: 18px;
+  }
+  .field label{
+    display:block; font-size: .68rem; color: var(--text-faint);
+    letter-spacing: .06em; margin-bottom: 4px; text-transform: uppercase;
+  }
+  input, select, textarea{
+    width: 100%;
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 7px 9px;
+    font-family: 'Crimson Pro', serif;
+    font-size: .95rem;
+    border-radius: 3px;
+  }
+  input:focus, select:focus, textarea:focus{
+    outline: none; border-color: var(--bone);
+  }
+  .field.nome input{
+    font-family:'Oswald', sans-serif;
+    font-size: 1.1rem;
+    color: var(--bone-bright);
+  }
+
+  /* ---------- Main grid ---------- */
+  .main-grid{ display:grid; grid-template-columns: 300px 1fr; gap: 18px; align-items:start; }
+  @media (max-width: 860px){ .main-grid{ grid-template-columns: 1fr; } }
+
+  .panel{
+    background: var(--bg-panel);
+    border: 1px solid var(--border-soft);
+    border-radius: 4px;
+    padding: 16px;
+    margin-bottom: 18px;
+  }
+  .panel h2{
+    font-family:'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: .95rem;
+    letter-spacing: .04em;
+    color: var(--bone-bright);
+    margin: 0 0 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-soft);
+  }
+
+  /* Atributos */
+  .attr-row{ display:flex; align-items:center; justify-content: space-between; margin-bottom: 10px; }
+  .attr-row:last-child{ margin-bottom: 0; }
+  .attr-name{ font-size: .95rem; color: var(--text); }
+  .attr-row select{ width: 72px; text-align:center; }
+
+  /* PV / PD */
+  .resource{ margin-bottom: 14px; }
+  .resource:last-child{ margin-bottom:0; }
+  .resource-head{ display:flex; align-items:center; justify-content: space-between; margin-bottom: 6px; }
+  .resource-head .label{ font-size: .8rem; color: var(--text-dim); letter-spacing:.03em; }
+  .resource-head .nums{ font-family:'Oswald',sans-serif; font-size: .85rem; color: var(--bone-bright); }
+  .resource-head .nums input{ width: 40px; display:inline-block; padding: 2px 4px; text-align:center; }
+  .pips{ display:flex; gap: 3px; flex-wrap: wrap; }
+  .pip{
+    width: 15px; height: 15px; border-radius: 2px;
+    border: 1px solid var(--border);
+    background: var(--bg-input);
+    cursor: pointer;
+  }
+  .pip.on.pv{ background: var(--blood-bright); border-color: var(--blood-bright); }
+  .pip.on.pd{ background: var(--bone); border-color: var(--bone); }
+
+  /* Habilidades */
+  .hab{ margin-bottom: 10px; border-left: 2px solid var(--border); padding-left: 10px; }
+  .hab input.hab-nome{
+    font-family:'Oswald',sans-serif; font-size: .85rem; color: var(--bone-bright);
+    background: transparent; border: none; padding: 2px 0; margin-bottom: 3px;
+  }
+  .hab textarea{
+    background: transparent; border: none; color: var(--text-dim);
+    font-size: .85rem; resize: vertical; min-height: 40px; padding: 2px 0;
+  }
+  .hab-row{ display:flex; gap:6px; align-items:flex-start; }
+  .hab-del{ background:none; border:none; color: var(--text-faint); font-size: .8rem; padding: 3px; }
+  .hab-del:hover{ color: var(--fail); }
+
+  /* Perícias */
+  .pericia-list{ display:flex; flex-direction: column; gap: 6px; }
+  .pericia-row{
+    display: grid;
+    grid-template-columns: 1fr auto auto auto auto;
+    gap: 10px;
+    align-items: center;
+    padding: 7px 10px;
+    background: var(--bg-panel-2);
+    border: 1px solid var(--border-soft);
+    border-radius: 3px;
+  }
+  .pericia-row .nome{ font-size: .92rem; }
+  .pericia-row .attr-tag{
+    font-size: .68rem; color: var(--text-faint); letter-spacing: .04em;
+    padding: 2px 6px; border: 1px solid var(--border); border-radius: 10px;
+    white-space: nowrap;
+  }
+  .pericia-row select{ width: 58px; text-align:center; padding: 5px; }
+  .roll-btn{
+    background: var(--blood); border: 1px solid var(--blood-bright);
+    color: #f2e3d0; font-family:'Oswald',sans-serif; font-size: .78rem;
+    letter-spacing: .03em; padding: 6px 12px; border-radius: 3px;
+    transition: transform .08s, background .15s;
+  }
+  .roll-btn:hover{ background: var(--blood-bright); }
+  .roll-btn:active{ transform: scale(.94); }
+  .roll-btn.rolling{ animation: shake .4s ease; }
+  @keyframes shake{
+    0%,100%{ transform: rotate(0); }
+    25%{ transform: rotate(-8deg); }
+    75%{ transform: rotate(8deg); }
+  }
+
+  .result-chip{
+    min-width: 34px; text-align:center;
+    font-family:'Oswald',sans-serif; font-size: .8rem;
+    padding: 4px 6px; border-radius: 3px;
+    border: 1px solid var(--border-soft); color: var(--text-faint);
+  }
+  .result-chip.pass{ color: var(--bone-bright); border-color: var(--bone); }
+  .result-chip.fail{ color: var(--fail); border-color: var(--fail); }
+  .result-chip.crit{ box-shadow: 0 0 8px rgba(201,164,99,.5); font-weight: 600; }
+
+  /* DT + bonus bar */
+  .roll-controls{
+    display:flex; align-items:center; gap: 18px; flex-wrap: wrap;
+    background: var(--bg-panel-2); border: 1px solid var(--border-soft);
+    border-radius: 4px; padding: 10px 14px; margin-bottom: 14px;
+  }
+  .roll-controls .ctrl{ display:flex; align-items:center; gap: 8px; }
+  .roll-controls label{ font-size: .78rem; color: var(--text-dim); letter-spacing: .03em; }
+  .roll-controls input[type=number]{ width: 56px; text-align:center; }
+  .roll-controls select{ width: 62px; text-align:center; }
+
+  /* Log */
+  .log{ max-height: 260px; overflow-y: auto; display:flex; flex-direction:column-reverse; gap: 6px; }
+  .log-entry{
+    font-size: .84rem; padding: 7px 10px;
+    border-left: 2px solid var(--border);
+    background: var(--bg-panel-2);
+    display:flex; justify-content: space-between; gap: 10px; flex-wrap:wrap;
+  }
+  .log-entry.pass{ border-left-color: var(--bone); }
+  .log-entry.fail{ border-left-color: var(--fail); }
+  .log-entry .who{ color: var(--text-dim); }
+  .log-entry .verdict{ font-family:'Oswald',sans-serif; font-size: .74rem; letter-spacing:.03em; }
+  .log-entry.pass .verdict{ color: var(--bone-bright); }
+  .log-entry.fail .verdict{ color: var(--fail); }
+  .log-empty{ color: var(--text-faint); font-style: italic; font-size: .85rem; padding: 6px 2px; }
+
+  .footnote{ color: var(--text-faint); font-size: .78rem; margin-top: 26px; line-height: 1.5; text-align:center; }
+  .footnote a{ color: var(--bone); }
+
+  ::-webkit-scrollbar{ width: 8px; }
+  ::-webkit-scrollbar-track{ background: var(--bg); }
+  ::-webkit-scrollbar-thumb{ background: var(--border); border-radius: 4px; }
+
+  /* ---------- Roll result modal ---------- */
+  .modal-overlay{
+    position: fixed; inset: 0;
+    background: rgba(6,5,4,.72);
+    backdrop-filter: blur(2px);
+    display: none;
+    align-items: center; justify-content: center;
+    z-index: 100;
+    padding: 20px;
+  }
+  .modal-overlay.show{ display: flex; }
+  .modal-card{
+    position: relative;
+    background: var(--bg-panel);
+    border: 1px solid var(--bone);
+    border-radius: 8px;
+    box-shadow: 0 20px 60px var(--shadow), 0 0 40px rgba(201,164,99,.12);
+    padding: 32px 40px 28px;
+    min-width: 300px;
+    max-width: 90vw;
+    text-align: center;
+    animation: modalIn .25s ease;
+  }
+  @keyframes modalIn{
+    from{ opacity: 0; transform: translateY(10px) scale(.97); }
+    to{ opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .modal-close{
+    position: absolute; top: 8px; right: 12px;
+    background: none; border: none; color: var(--text-faint);
+    font-size: 1.4rem; line-height: 1; padding: 4px 8px;
+  }
+  .modal-close:hover{ color: var(--bone-bright); }
+  .modal-pericia{
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.15rem; letter-spacing: .04em;
+    color: var(--bone-bright);
+    margin: 0 0 20px;
+  }
+  .modal-dice{
+    display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;
+    margin-bottom: 22px;
+  }
+  .die-face{
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+  }
+  .die-face .shape{
+    width: 58px; height: 58px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--bg-panel-2);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.4rem;
+    color: var(--text);
+    transform: rotate(-3deg);
+    animation: dieDrop .35s ease;
+  }
+  .die-face:nth-child(even) .shape{ transform: rotate(3deg); }
+  @keyframes dieDrop{
+    from{ opacity: 0; transform: translateY(-14px) rotate(0deg) scale(.6); }
+    to{ opacity: 1; transform: translateY(0) rotate(-3deg) scale(1); }
+  }
+  .die-face .tag{
+    font-size: .68rem; color: var(--text-faint); letter-spacing: .03em;
+  }
+  .modal-total{
+    display: flex; align-items: baseline; justify-content: center; gap: 10px;
+    border-top: 1px solid var(--border-soft);
+    padding-top: 18px;
+  }
+  .modal-total-label{
+    font-size: .75rem; color: var(--text-dim); letter-spacing: .06em;
+  }
+  .modal-total-num{
+    font-family: 'Oswald', sans-serif;
+    font-size: 2.4rem; color: var(--bone-bright);
+    text-shadow: 0 0 18px rgba(201,164,99,.35);
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <svg class="sigil" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M50 6 L58 34 L88 30 L64 48 L78 76 L50 58 L22 76 L36 48 L12 30 L42 34 Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+      <circle cx="50" cy="50" r="6" fill="currentColor"/>
+    </svg>
+    <div>
+      <h1>Ordem Paranormal RPG II</h1>
+      <p>Fichas de sobrevivente &amp; mesa de rolagens</p>
+    </div>
+  </header>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div id="sheetRoot"></div>
+
+  <p class="footnote">Dica: cada teste soma o dado de <strong>Atributo</strong> + dado de <strong>Perícia</strong> escolhido para a Perícia rolada.</p>
+</div>
+
+<div class="modal-overlay" id="rollModal">
+  <div class="modal-card">
+    <button class="modal-close" id="modalClose">×</button>
+    <p class="modal-pericia" id="modalPericia"></p>
+    <div class="modal-dice" id="modalDice"></div>
+    <div class="modal-total">
+      <span class="modal-total-label">Total</span>
+      <span class="modal-total-num" id="modalTotal"></span>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const DICE = ['d4','d6','d8','d10','d12','d20'];
+  const PERICIAS_BASE = [
+    ['Acrobacia','fisico'], ['Aptidão','mente'], ['Atletismo','fisico'], ['Crime','fisico'],
+    ['Disciplina','emocao'], ['Enganação','emocao'], ['Furtividade','fisico'], ['Intimidação','emocao'],
+    ['Intuição','emocao'], ['Luta','fisico'], ['Máquinas','mente'], ['Medicina','mente'],
+    ['Ocultismo','mente'], ['Percepção','mente'], ['Persuasão','emocao'], ['Pesquisa','mente'],
+    ['Pontaria','fisico'], ['Sobrevivência','mente'], ['Tecnologia','mente'], ['Vigor','fisico']
+  ];
+  const ATTR_LABEL = { fisico:'Físico', mente:'Mente', emocao:'Emoção' };
+
+  function uid(){ return Math.random().toString(36).slice(2,10); }
+
+  function novaFicha(nome){
+    return {
+      id: uid(),
+      nome: nome || 'Novo Personagem',
+      perfil: '', ocupacao: '', nivel: 1,
+      pv: { atual: 10, max: 10 },
+      pd: { atual: 10, max: 10 },
+      atributos: { fisico:'d6', mente:'d6', emocao:'d6' },
+      pericias: PERICIAS_BASE.map(([nome,attr]) => ({ nome, attr, dado:'d4' })),
+      habilidades: [],
+      log: []
+    };
+  }
+
+  function fichaEloisa(){
+    const f = novaFicha('Eloísa');
+    f.perfil = 'Analista'; f.ocupacao = 'Artista'; f.nivel = 2;
+    f.pv = { atual: 12, max: 12 }; f.pd = { atual: 14, max: 14 };
+    f.atributos = { fisico:'d8', mente:'d8', emocao:'d6' };
+    const dados = {
+      'Acrobacia':'d6','Aptidão':'d4','Atletismo':'d4','Crime':'d6','Disciplina':'d6',
+      'Enganação':'d4','Furtividade':'d4','Intimidação':'d4','Intuição':'d8','Luta':'d4',
+      'Máquinas':'d4','Medicina':'d4','Ocultismo':'d4','Percepção':'d6','Persuasão':'d4',
+      'Pesquisa':'d6','Pontaria':'d4','Sobrevivência':'d4','Tecnologia':'d6','Vigor':'d4'
+    };
+    f.pericias.forEach(p => { if(dados[p.nome]) p.dado = dados[p.nome]; });
+    f.habilidades = [
+      { nome:'Avaliação', texto:'Gaste uma ação e 2 PD para observar um ser ou ambiente. Você recebe 2 dados-bônus que pode usar em testes relativos àquele ser ou ambiente (some ambos em um teste, ou +1 dado em dois testes). Máximo de dois dados acumulados.' },
+      { nome:'Foco Emocional', texto:'Quando faz um teste emocional, você pode gastar 2 PD para receber +1 dado no teste.' }
+    ];
+    return f;
+  }
+
+  function fichaAlan(){
+    const f = novaFicha('Alan');
+    f.perfil = 'Executor'; f.ocupacao = 'Cientista'; f.nivel = 2;
+    f.pv = { atual: 10, max: 10 }; f.pd = { atual: 16, max: 16 };
+    f.atributos = { fisico:'d6', mente:'d8', emocao:'d8' };
+    const dados = {
+      'Acrobacia':'d4','Aptidão':'d6','Atletismo':'d4','Crime':'d6','Disciplina':'d6',
+      'Enganação':'d6','Furtividade':'d4','Intimidação':'d4','Intuição':'d4','Luta':'d4',
+      'Máquinas':'d4','Medicina':'d4','Ocultismo':'d4','Percepção':'d8','Persuasão':'d4',
+      'Pesquisa':'d6','Pontaria':'d4','Sobrevivência':'d4','Tecnologia':'d4','Vigor':'d6'
+    };
+    f.pericias.forEach(p => {
+      if(dados[p.nome]) p.dado = dados[p.nome];
+      if(p.nome === 'Aptidão') p.nome = 'Aptidão (Humanas)';
+    });
+    f.habilidades = [
+      { nome:'Foco Mental', texto:'Quando faz um teste mental, você pode gastar 2 PD para receber +1 dado no teste.' },
+      { nome:'Ímpeto', texto:'Você possui uma barra de ímpeto com três espaços. Sempre que falha em um teste, você preenche um espaço na barra. Você pode apagar espaços preenchidos para: receber +1 dado em um teste; ou apagar os três para aumentar um atributo em um passo até o fim da cena.' }
+    ];
+    return f;
+  }
+
+  function fichaVictor(){
+    const f = novaFicha('Victor');
+    f.perfil = 'Vigilante'; f.ocupacao = 'Professor'; f.nivel = 2;
+    f.pv = { atual: 14, max: 14 }; f.pd = { atual: 14, max: 14 };
+    f.atributos = { fisico:'d8', mente:'d6', emocao:'d8' };
+    const dados = {
+      'Acrobacia':'d4','Aptidão':'d6','Atletismo':'d6','Crime':'d4','Disciplina':'d6',
+      'Enganação':'d4','Furtividade':'d4','Intimidação':'d4','Intuição':'d4','Luta':'d4',
+      'Máquinas':'d4','Medicina':'d4','Ocultismo':'d4','Percepção':'d6','Persuasão':'d4',
+      'Pesquisa':'d8','Pontaria':'d4','Sobrevivência':'d4','Tecnologia':'d4','Vigor':'d6'
+    };
+    f.pericias.forEach(p => {
+      if(dados[p.nome]) p.dado = dados[p.nome];
+      if(p.nome === 'Aptidão') p.nome = 'Aptidão (Humanas)';
+    });
+    f.habilidades = [
+      { nome:'Mentoria', texto:'Quando ajuda outro personagem, você pode fazer um teste da perícia que usou para ajudar contra DT 7. Se passar, o personagem ajudado pode substituir um dos dados rolados por ele pela sua rolagem alta.' },
+      { nome:'Prontidão', texto:'No início de qualquer conflito, você pode gastar 3 PD. Se fizer isso, ganha uma rodada na qual pode agir antes dos demais personagens e NPCs.' }
+    ];
+    return f;
+  }
+
+  function fichaEdgar(){
+    const f = novaFicha('Edgar');
+    f.perfil = 'Executor'; f.ocupacao = 'Operário'; f.nivel = 2;
+    f.pv = { atual: 18, max: 18 }; f.pd = { atual: 10, max: 10 };
+    f.atributos = { fisico:'d10', mente:'d6', emocao:'d6' };
+    const dados = {
+      'Acrobacia':'d4','Aptidão':'d4','Atletismo':'d8','Crime':'d6','Disciplina':'d4',
+      'Enganação':'d4','Furtividade':'d4','Intimidação':'d6','Intuição':'d4','Luta':'d6',
+      'Máquinas':'d4','Medicina':'d4','Ocultismo':'d4','Percepção':'d6','Persuasão':'d4',
+      'Pesquisa':'d4','Pontaria':'d4','Sobrevivência':'d6','Tecnologia':'d4','Vigor':'d6'
+    };
+    f.pericias.forEach(p => { if(dados[p.nome]) p.dado = dados[p.nome]; });
+    f.habilidades = [
+      { nome:'Esforço e Suor', texto:'Você possui uma perícia física aumentada para d6 (já contabilizado na ficha).' },
+      { nome:'Ímpeto', texto:'Você possui uma barra de ímpeto com três espaços. Sempre que falha em um teste, você preenche um espaço na barra. Você pode apagar espaços preenchidos para: receber +1 dado em um teste; ou apagar os três para aumentar um atributo em um passo até o fim da cena.' }
+    ];
+    return f;
+  }
+
+  function fichaKenia(){
+    const f = novaFicha('Kênia');
+    f.perfil = 'Analista'; f.ocupacao = 'Profissional de Escritório'; f.nivel = 2;
+    f.pv = { atual: 12, max: 12 }; f.pd = { atual: 12, max: 12 };
+    f.atributos = { fisico:'d6', mente:'d10', emocao:'d6' };
+    const dados = {
+      'Acrobacia':'d6','Aptidão':'d6','Atletismo':'d6','Crime':'d4','Disciplina':'d6',
+      'Enganação':'d4','Furtividade':'d4','Intimidação':'d4','Intuição':'d6','Luta':'d4',
+      'Máquinas':'d4','Medicina':'d4','Ocultismo':'d4','Percepção':'d6','Persuasão':'d4',
+      'Pesquisa':'d6','Pontaria':'d4','Sobrevivência':'d4','Tecnologia':'d8','Vigor':'d6'
+    };
+    f.pericias.forEach(p => {
+      if(dados[p.nome]) p.dado = dados[p.nome];
+      if(p.nome === 'Aptidão') p.nome = 'Aptidão (Atualidades)';
+    });
+    f.habilidades = [
+      { nome:'Avaliação', texto:'Gaste uma ação e 2 PD para observar um ser ou ambiente. Você recebe 2 dados-bônus que pode usar em testes relativos àquele ser ou ambiente (some ambos em um teste, ou +1 dado em dois testes). Máximo de dois dados acumulados.' },
+      { nome:'Conhecimento Técnico', texto:'Você possui uma perícia mental aumentada para d6 (este aumento já está contabilizado na ficha).' }
+    ];
+    return f;
+  }
+
+  let state = { chars: [
+    fichaEloisa(),
+    fichaAlan(),
+    fichaVictor(),
+    fichaEdgar(),
+    fichaKenia()
+  ], activeId: null };
+  state.activeId = state.chars[0].id;
+
+  function getActive(){ return state.chars.find(c => c.id === state.activeId); }
+  function rollDie(die){ const n = parseInt(die.slice(1)); return 1 + Math.floor(Math.random()*n); }
+
+  function doRoll(char, pericia, bonusCount, bonusDie){
+    const attrDie = char.atributos[pericia.attr];
+    const dice = [ { label: ATTR_LABEL[pericia.attr]+' '+attrDie, val: rollDie(attrDie) },
+                   { label: pericia.nome+' '+pericia.dado, val: rollDie(pericia.dado) } ];
+    for(let i=0;i<bonusCount;i++){ dice.push({ label:'Bônus '+bonusDie, val: rollDie(bonusDie) }); }
+    const vals = dice.map(d=>d.val).sort((a,b)=>b-a);
+    const sum = vals.length<=3 ? vals.reduce((a,b)=>a+b,0) : vals[0]+vals[1]+vals[2];
+    const entry = { id: uid(), pericia: pericia.nome, dice, sum, ts: Date.now() };
+    char.log = [entry];
+    return entry;
+  }
+
+  // ---------- Rendering ----------
+  function render(){
+    renderTabs();
+    renderSheet();
+  }
+
+  function renderTabs(){
+    const tabs = document.getElementById('tabs');
+    tabs.innerHTML = '';
+    state.chars.forEach(c => {
+      const el = document.createElement('div');
+      el.className = 'tab' + (c.id === state.activeId ? ' active' : '');
+      el.innerHTML = `<span class="tab-name">${escapeHtml(c.nome)}</span>` +
+        (state.chars.length > 1 ? `<span class="x" data-del="${c.id}">×</span>` : '');
+      el.addEventListener('click', (e) => {
+        if(e.target.dataset.del) return;
+        state.activeId = c.id; render();
+      });
+      tabs.appendChild(el);
+    });
+    const addBtn = document.createElement('button');
+    addBtn.className = 'tab-add';
+    addBtn.textContent = '+ Novo';
+    addBtn.addEventListener('click', () => {
+      const f = novaFicha('Novo Sobrevivente');
+      state.chars.push(f); state.activeId = f.id; render();
+    });
+    tabs.appendChild(addBtn);
+
+    tabs.querySelectorAll('[data-del]').forEach(x => {
+      x.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = x.dataset.del;
+        if(!confirm('Remover esta ficha?')) return;
+        state.chars = state.chars.filter(c => c.id !== id);
+        if(state.activeId === id) state.activeId = state.chars[0].id;
+        render();
+      });
+    });
+  }
+
+  function fieldOptions(current){
+    return DICE.map(d => `<option value="${d}" ${d===current?'selected':''}>${d}</option>`).join('');
+  }
+
+  function renderSheet(){
+    const c = getActive();
+    const root = document.getElementById('sheetRoot');
+    root.innerHTML = `
+      <div class="identity">
+        <div class="field nome">
+          <label>Nome</label>
+          <input type="text" data-bind="nome" value="${escapeHtml(c.nome)}">
+        </div>
+        <div class="field">
+          <label>Perfil</label>
+          <input type="text" data-bind="perfil" value="${escapeHtml(c.perfil)}" placeholder="Executor / Analista / Vigilante">
+        </div>
+        <div class="field">
+          <label>Ocupação</label>
+          <input type="text" data-bind="ocupacao" value="${escapeHtml(c.ocupacao)}">
+        </div>
+        <div class="field">
+          <label>Nível</label>
+          <input type="number" min="1" max="10" data-bind="nivel" value="${c.nivel}">
+        </div>
+      </div>
+
+      <div class="roll-controls">
+        <div class="ctrl">
+          <label>Dados de ajuda na próxima rolagem</label>
+          <input type="number" id="bonusInput" value="0" min="0" max="3">
+          <select id="bonusDie">${fieldOptions('d6')}</select>
+        </div>
+        <button class="btn small" id="clearLog">Limpar registro</button>
+        <button class="btn small" id="duplicateChar">Duplicar ficha</button>
+      </div>
+
+      <div class="main-grid">
+        <div>
+          <div class="panel">
+            <h2>Atributos</h2>
+            ${['fisico','mente','emocao'].map(a => `
+              <div class="attr-row">
+                <span class="attr-name">${ATTR_LABEL[a]}</span>
+                <select data-attr="${a}">${fieldOptions(c.atributos[a])}</select>
+              </div>
+            `).join('')}
+          </div>
+
+          <div class="panel">
+            <h2>Recursos</h2>
+            <div class="resource">
+              <div class="resource-head">
+                <span class="label">Pontos de Vida (PV)</span>
+                <span class="nums"><input type="number" id="pvAtual" value="${c.pv.atual}"> / <input type="number" id="pvMax" value="${c.pv.max}"></span>
+              </div>
+              <div class="pips" id="pvPips"></div>
+            </div>
+            <div class="resource">
+              <div class="resource-head">
+                <span class="label">Pontos de Determinação (PD)</span>
+                <span class="nums"><input type="number" id="pdAtual" value="${c.pd.atual}"> / <input type="number" id="pdMax" value="${c.pd.max}"></span>
+              </div>
+              <div class="pips" id="pdPips"></div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <h2>Habilidades</h2>
+            <div id="habList"></div>
+            <button class="btn small" id="addHab">+ Nova habilidade</button>
+          </div>
+        </div>
+
+        <div>
+          <div class="panel">
+            <h2>Perícias</h2>
+            <div class="pericia-list" id="periciaList"></div>
+          </div>
+
+          <div class="panel">
+            <h2>Registro de rolagens</h2>
+            <div class="log" id="log"></div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // bind identity fields
+    root.querySelectorAll('[data-bind]').forEach(inp => {
+      inp.addEventListener('input', () => {
+        const key = inp.dataset.bind;
+        c[key] = inp.type === 'number' ? parseInt(inp.value)||0 : inp.value;
+        if(key === 'nome') renderTabs();
+      });
+    });
+
+    // atributos
+    root.querySelectorAll('[data-attr]').forEach(sel => {
+      sel.addEventListener('change', () => { c.atributos[sel.dataset.attr] = sel.value; });
+    });
+
+    // DT / bonus
+    document.getElementById('clearLog').addEventListener('click', () => { c.log = []; renderLog(); });
+    document.getElementById('duplicateChar').addEventListener('click', () => {
+      const copy = JSON.parse(JSON.stringify(c));
+      copy.id = uid(); copy.nome = c.nome + ' (cópia)'; copy.log = [];
+      state.chars.push(copy); state.activeId = copy.id; render();
+    });
+
+    // PV / PD numeric inputs
+    function bindResource(kind){
+      document.getElementById(kind+'Atual').addEventListener('input', (e) => {
+        c[kind].atual = Math.max(0, Math.min(c[kind].max, parseInt(e.target.value)||0)); renderPips();
+      });
+      document.getElementById(kind+'Max').addEventListener('input', (e) => {
+        c[kind].max = Math.max(1, parseInt(e.target.value)||1);
+        c[kind].atual = Math.min(c[kind].atual, c[kind].max); renderPips();
+      });
+    }
+    bindResource('pv'); bindResource('pd');
+
+    function renderPips(){
+      ['pv','pd'].forEach(kind => {
+        const wrap = document.getElementById(kind+'Pips');
+        wrap.innerHTML = '';
+        for(let i=1; i<=c[kind].max; i++){
+          const p = document.createElement('div');
+          p.className = 'pip' + (i<=c[kind].atual ? ' on '+kind : '');
+          p.addEventListener('click', () => {
+            c[kind].atual = (i === c[kind].atual) ? i-1 : i;
+            document.getElementById(kind+'Atual').value = c[kind].atual;
+            renderPips();
+          });
+          wrap.appendChild(p);
+        }
+      });
+    }
+    renderPips();
+
+    // Habilidades
+    function renderHabs(){
+      const wrap = document.getElementById('habList');
+      wrap.innerHTML = '';
+      c.habilidades.forEach((h, idx) => {
+        const div = document.createElement('div');
+        div.className = 'hab';
+        div.innerHTML = `
+          <div class="hab-row">
+            <div style="flex:1">
+              <input class="hab-nome" value="${escapeHtml(h.nome)}" placeholder="Nome da habilidade">
+              <textarea rows="2" placeholder="Descrição">${escapeHtml(h.texto)}</textarea>
+            </div>
+            <button class="hab-del" data-idx="${idx}">✕</button>
+          </div>
+        `;
+        div.querySelector('.hab-nome').addEventListener('input', (e) => { h.nome = e.target.value; });
+        div.querySelector('textarea').addEventListener('input', (e) => { h.texto = e.target.value; });
+        div.querySelector('.hab-del').addEventListener('click', () => { c.habilidades.splice(idx,1); renderHabs(); });
+        wrap.appendChild(div);
+      });
+    }
+    renderHabs();
+    document.getElementById('addHab').addEventListener('click', () => {
+      c.habilidades.push({ nome:'Nova habilidade', texto:'' }); renderHabs();
+    });
+
+    // Perícias
+    function renderPericias(){
+      const wrap = document.getElementById('periciaList');
+      wrap.innerHTML = '';
+      c.pericias.forEach((p, idx) => {
+        const row = document.createElement('div');
+        row.className = 'pericia-row';
+        row.innerHTML = `
+          <span class="nome">${escapeHtml(p.nome)}</span>
+          <span class="attr-tag">${ATTR_LABEL[p.attr]} ${c.atributos[p.attr]}</span>
+          <select data-idx="${idx}">${fieldOptions(p.dado)}</select>
+          <button class="roll-btn" data-roll="${idx}">Rolar</button>
+          <span class="result-chip" id="chip-${idx}">—</span>
+        `;
+        row.querySelector('select').addEventListener('change', (e) => { p.dado = e.target.value; renderPericias(); });
+        row.querySelector('[data-roll]').addEventListener('click', (e) => {
+          const btn = e.currentTarget;
+          btn.classList.add('rolling');
+          setTimeout(() => btn.classList.remove('rolling'), 400);
+          const bonus = parseInt(document.getElementById('bonusInput').value)||0;
+          const bonusDie = document.getElementById('bonusDie').value;
+          const entry = doRoll(c, p, bonus, bonusDie);
+          document.getElementById('bonusInput').value = 0;
+          const chip = document.getElementById('chip-'+idx);
+          chip.textContent = entry.sum;
+          chip.className = 'result-chip';
+          renderLog();
+          showRollModal(entry);
+        });
+        wrap.appendChild(row);
+      });
+    }
+    renderPericias();
+
+    renderLog();
+  }
+
+  function renderLog(){
+    const c = getActive();
+    const wrap = document.getElementById('log');
+    if(!c.log.length){
+      wrap.innerHTML = '<div class="log-empty">Nenhuma rolagem ainda. Clique em "Rolar" em uma perícia.</div>';
+      return;
+    }
+    const e = c.log[0];
+    const diceStr = e.dice.map(d => `${d.label} = ${d.val}`).join(' &nbsp;+&nbsp; ');
+    wrap.innerHTML = `<div class="log-entry">
+      <span class="who"><strong>${escapeHtml(e.pericia)}</strong> — ${diceStr} &nbsp;=&nbsp; <strong>${e.sum}</strong></span>
+    </div>`;
+  }
+
+  // ---------- Roll result modal ----------
+  function showRollModal(entry){
+    document.getElementById('modalPericia').textContent = entry.pericia;
+    document.getElementById('modalDice').innerHTML = entry.dice.map(d => `
+      <div class="die-face">
+        <div class="shape">${d.val}</div>
+        <span class="tag">${escapeHtml(d.label)}</span>
+      </div>
+    `).join('');
+    document.getElementById('modalTotal').textContent = entry.sum;
+    document.getElementById('rollModal').classList.add('show');
+  }
+  function hideRollModal(){ document.getElementById('rollModal').classList.remove('show'); }
+  document.getElementById('modalClose').addEventListener('click', hideRollModal);
+  document.getElementById('rollModal').addEventListener('click', (e) => {
+    if(e.target.id === 'rollModal') hideRollModal();
+  });
+  document.addEventListener('keydown', (e) => { if(e.key === 'Escape') hideRollModal(); });
+
+  function escapeHtml(s){
+    return String(s ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>

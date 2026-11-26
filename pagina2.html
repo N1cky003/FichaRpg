@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ordem Paranormal RPG II — Contos da Vigília</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Crimson+Pro:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+:root{--bg:#0a0908;--p:#16130f;--p2:#1e1913;--in:#100d0a;--bd:#3a2f22;--bs:#2a2119;--tx:#e8dfc9;--dim:#a7987e;--faint:#6e6353;--blood:#7d1f1f;--bb:#c8402f;--bone:#c9a463;--bb2:#e0bd7f;--fail:#b3372c;--ok:#6fa66a}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--tx);font:16px 'Crimson Pro',serif}
+body{background-image:radial-gradient(ellipse at 20% 0%,rgba(125,31,31,.10),transparent 55%),radial-gradient(ellipse at 90% 100%,rgba(201,164,99,.06),transparent 50%)}
+.wrap{max-width:1180px;margin:0 auto;padding:24px 18px 80px}
+header.top{display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--bd);padding-bottom:16px;margin-bottom:18px;flex-wrap:wrap}
+header.top h1{font:600 1.5rem 'Oswald',sans-serif;color:var(--bb2);margin:0;letter-spacing:.03em}
+header.top p{margin:2px 0 0;color:var(--faint);font-size:.85rem;font-style:italic}
+.top-actions{margin-left:auto}
+button,select,input,textarea{font-family:'Crimson Pro',serif}
+button{cursor:pointer}
+.btn{background:var(--p2);border:1px solid var(--bd);color:var(--dim);padding:6px 12px;border-radius:3px;font-size:.82rem;text-decoration:none;display:inline-block}
+.btn:hover{border-color:var(--bb2);color:var(--bb2)}
+.btn.sm{padding:3px 8px;font-size:.74rem}
+.btn:disabled{opacity:.35;cursor:default}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
+.tab{background:var(--p);border:1px solid var(--bs);border-bottom:2px solid transparent;color:var(--dim);padding:7px 14px;font:500 .85rem 'Oswald',sans-serif;border-radius:3px 3px 0 0}
+.tab.on{color:var(--bb2);border-bottom-color:var(--bb);background:var(--p2)}
+.identity{display:grid;grid-template-columns:2fr 1.2fr 1.2fr .6fr;gap:12px;background:var(--p);border:1px solid var(--bs);border-radius:4px;padding:12px 16px;margin-bottom:14px}
+.identity .nm{font:600 1.4rem 'Oswald',sans-serif;color:var(--bb2)}
+.identity .nm small{font-size:.9rem;color:var(--dim);font-weight:500}
+.lbl{font-size:.68rem;color:var(--faint);letter-spacing:.06em;text-transform:uppercase}
+.identity .v{font-size:1.05rem}
+input,select,textarea{background:var(--in);border:1px solid var(--bd);color:var(--tx);padding:5px 7px;font-size:.92rem;border-radius:3px}
+input[type=number]{width:54px;text-align:center}
+.grid{display:grid;grid-template-columns:320px 1fr;gap:16px;align-items:start}
+@media(max-width:880px){.grid,.identity{grid-template-columns:1fr}}
+.panel{background:var(--p);border:1px solid var(--bs);border-radius:4px;padding:14px;margin-bottom:16px}
+.panel h2{font:600 .95rem 'Oswald',sans-serif;letter-spacing:.04em;color:var(--bb2);margin:0 0 10px;padding-bottom:7px;border-bottom:1px solid var(--bs)}
+.panel h3{font:600 .85rem 'Oswald',sans-serif;color:var(--bone);margin:12px 0 5px}
+.row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.row.sp{justify-content:space-between}
+.ctrl{background:var(--p2);border:1px solid var(--bs);border-radius:4px;padding:9px 12px;margin-bottom:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center;font-size:.82rem;color:var(--dim)}
+.ctrl label{display:flex;gap:6px;align-items:center}
+.chip{display:inline-block;border:1px solid var(--bone);color:var(--bb2);border-radius:10px;padding:1px 8px;font-size:.75rem;margin-right:4px}
+.pips{display:flex;gap:3px;flex-wrap:wrap;margin-top:5px}
+.pip{width:14px;height:14px;border-radius:2px;border:1px solid var(--bd);background:var(--in);cursor:pointer}
+.pip.on.pv{background:var(--bb);border-color:var(--bb)}.pip.on.pd{background:var(--bone);border-color:var(--bone)}
+.pip.on.mk{background:#5d8aa8;border-color:#5d8aa8}.pip.on.im{background:#a86fbf;border-color:#a86fbf}
+.pip.big{width:26px;height:16px}
+.hab{border-left:2px solid var(--bd);padding-left:10px;margin-bottom:12px}
+.hab b{font:500 .88rem 'Oswald',sans-serif;color:var(--bb2)}
+.hab p{margin:3px 0 6px;font-size:.86rem;color:var(--dim);line-height:1.35}
+.per{display:grid;grid-template-columns:1fr auto auto auto auto;gap:8px;align-items:center;padding:5px 9px;background:var(--p2);border:1px solid var(--bs);border-radius:3px;margin-bottom:5px}
+.tag{font-size:.68rem;color:var(--faint);border:1px solid var(--bd);border-radius:10px;padding:1px 6px;white-space:nowrap}
+.per select{width:56px}
+.roll{background:var(--blood);border:1px solid var(--bb);color:#f2e3d0;font:500 .78rem 'Oswald',sans-serif;padding:5px 11px;border-radius:3px}
+.roll:hover{background:var(--bb)}
+.res{min-width:34px;text-align:center;font:500 .8rem 'Oswald',sans-serif;color:var(--faint)}
+.log{max-height:260px;overflow:auto;display:flex;flex-direction:column;gap:5px}
+.le{font-size:.84rem;padding:6px 10px;border-left:2px solid var(--bd);background:var(--p2)}
+.le.ok{border-left-color:var(--bone)}.le.no{border-left-color:var(--fail)}
+.rel{padding:7px 0;border-bottom:1px solid var(--bs);font-size:.85rem}
+.rel .g{color:var(--bone);letter-spacing:2px}.rel .t{color:var(--dim)}
+.ov{position:fixed;inset:0;background:rgba(6,5,4,.74);display:none;align-items:center;justify-content:center;z-index:100;padding:16px}
+.ov.show{display:flex}
+.card{position:relative;background:var(--p);border:1px solid var(--bone);border-radius:8px;padding:28px 34px;min-width:300px;max-width:94vw;text-align:center}
+.card .x{position:absolute;top:6px;right:10px;background:none;border:0;color:var(--faint);font-size:1.4rem}
+.card .tt{font:500 1.15rem 'Oswald',sans-serif;color:var(--bb2);margin:0 0 16px}
+.dice{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-bottom:18px}
+.die{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:.68rem;color:var(--faint)}
+.die .s{width:54px;height:54px;display:flex;align-items:center;justify-content:center;background:var(--p2);border:2px solid var(--bd);border-radius:10px;font:1.4rem 'Oswald',sans-serif;color:var(--tx)}
+.die.an .s{opacity:.35;text-decoration:line-through}
+.die.pv .s{border-color:var(--fail)}
+.tot{border-top:1px solid var(--bs);padding-top:14px}
+.tot .n{font:2.4rem 'Oswald',sans-serif;color:var(--bb2)}
+.verd{font:500 .95rem 'Oswald',sans-serif;margin-top:4px}
+.verd.ok{color:var(--ok)}.verd.no{color:var(--fail)}
+.note{font-size:.85rem;color:var(--dim);margin-top:8px}
+details{margin-bottom:8px;background:var(--p2);border:1px solid var(--bs);border-radius:3px;padding:8px 12px}
+summary{cursor:pointer;font:500 .88rem 'Oswald',sans-serif;color:var(--bb2)}
+details p,details li{font-size:.86rem;color:var(--dim);line-height:1.4}
+details ul{padding-left:18px;margin:6px 0}
+.foot{text-align:center;color:var(--faint);font-size:.78rem;margin-top:24px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <div><h1>Ordem Paranormal RPG II — Contos da Vigília</h1><p>Playtest Beta 1.1 · Missão 1: Os Sobreviventes (Ballynyr, Irlanda)</p></div>
+  <div class="top-actions"><a class="btn" href="index.html">← Fichas do Playtest Alpha</a></div>
+</header>
+<div class="tabs" id="tabs"></div>
+<div id="root"></div>
+<p class="foot">Regras do Playtest Beta (pp. 4–25): testes, críticos, pavor, lesões, traumas, armadura e relações. Dado de atributo + dado de perícia; soma-se no máximo os 3 maiores.</p>
+</div>
+<div class="ov" id="ov"><div class="card"><button class="x" data-a="close">×</button><div id="mb"></div></div></div>
+
+<script>
+(()=>{
+const D=[4,6,8,10,12];
+const PER=[['Acrobacia','F'],['Animais','E'],['Aptidão','M'],['Atletismo','F'],['Bruxaria','M'],['Crime','F'],['Disciplina','E'],['Enganação','E'],['Furtividade','F'],['Inspecionar','M'],['Intimidar','E'],['Intuição','E'],['Luta','F'],['Medicina','M'],['Ofício','M'],['Percepção','M'],['Persuasão','E'],['Pontaria','F'],['Sobrevivência','M'],['Vigor','F']];
+const AN={F:'Físico',M:'Mente',E:'Emoção'};
+const NAMES=['Rhiona','Rowan','Muirenn','Cavan','Malik','Sira','Sorcha','Cormac'];
+const IDX=n=>PER.findIndex(p=>p[0]===n);
+const rd=n=>1+Math.floor(Math.random()*n);
+const stp=(d,s)=>D[Math.max(0,Math.min(4,D.indexOf(d)+s))];
+const esc=s=>String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+const sum=a=>a.reduce((x,y)=>x+y,0);
+
+const ANALISE=[{n:'Análise',t:'Gaste uma ação para receber 2 marcadores de análise (máx. 4; os não usados se perdem no fim da cena). Ao fazer um teste, após rolar, gaste marcadores para mudar o resultado de um dado em +1 ou −1 (até o máximo do dado) — use os botões +/− na janela da rolagem.',b:[['Gastar ação: +2 marcadores','an2']]}];
+const IMPETO=[{n:'Ímpeto',t:'Barra de 5 espaços. Sempre que faz um teste e falha, preenche um espaço (automático). Como ação livre, gaste: 1 espaço = +d4 em um teste; 3 espaços = aumenta um atributo em um passo até o fim da cena; 3 espaços = ação extra em cenas de conflito. No fim da cena a barra esvazia.',b:[['1: +d4 no teste','i1'],['3: atributo +1 passo','i3'],['3: ação extra','ix']]}];
+const PRONT=n=>({n,t:'Uma vez por rodada, quando você ou outro ser em alcance curto faz um teste, gaste 2 PD para rolar novamente, ou para fazer o outro ser rolar novamente, um dos dados cujo resultado não tenha sido 1. Em combates, você pode agir na fase dela ou em fases posteriores, e após qualquer ação daquela fase já ter sido rolada.',b:[['Gastar 2 PD','pd2']]});
+
+const C=[
+{id:'rhiona',n:'Rhiona',s:'Mac Tuirenn',p:'Analista',v:'Ferreira',F:10,M:6,E:6,pv:22,pd:12,ofi:'Metalurgia',an:1,
+ sk:[4,4,4,8,4,4,6,4,4,4,4,4,10,4,8,6,6,4,4,8],
+ h:[...ANALISE,{n:'Leitura de Combate',t:'Em combate, sempre que gastar uma ação para se defender, recebe um marcador de análise.',b:[['+1 marcador','an1']]},{n:'Segredo do Aço',t:'Sabe usar equipamentos marciais. Se estiver vestindo um item que forneça pontos de armadura, ele fornece 1 ponto de armadura adicional (ajuste o campo Armadura).',b:[]}],
+ w:[{n:'Martelo de forja (corpo a corpo, RA+3)',sk:'Luta',m:3}],eq:'Martelo de forja, tenaz de ferreiro.',
+ r:[['Rowan',1,'Confiança. Quem lhe traz o minério de ferro do pântano.'],['Muirenn',0,'Neutro. Soube de enfermos tratados pela curandeira.'],['Cavan',2,'Amizade. Passam horas debatendo contabilidade.'],['Malik',1,'Admiração. Gosta de ouvir as histórias que ele traz.'],['Sira',0,'Neutro. Aguarda ela se recuperar do naufrágio.'],['Sorcha',1,'Respeito. Reconhece a importância de sua vigilância.'],['Cormac',1,'Curiosidade. Pergunta-se de onde vem a espada que carrega.']]},
+{id:'rowan',n:'Rowan',s:'Lobo Castanho',p:'Vigilante',v:'Adestrador',F:8,M:8,E:6,pv:20,pd:12,
+ sk:[4,8,4,6,4,4,4,4,6,4,4,4,6,6,4,8,4,10,8,6],
+ h:[PRONT('Prontidão'),{n:'Esquiva',t:'Uma vez por rodada, quando sofre um ataque, pode fazer um teste de Acrobacia oposto ao teste de ataque como ação livre. Se vencer, evita o ataque.',b:[['Rolar Acrobacia','esq']]},{n:'Espectro, o Lobo',t:'Parceiro lobo que fornece +d6 em testes de ataque corpo a corpo. Se o dado do lobo rolar 1, ele fica machucado e não ajuda mais pelo resto da cena (controlado automaticamente nos ataques).',b:[['Lobo pronto/machucado','lobo']]}],
+ w:[{n:'Arco curto de teixo (distância, RA+1)',sk:'Pontaria',m:1,r:1},{n:'Lança de javali (corpo a corpo, RA+2)',sk:'Luta',m:2}],eq:'Arco curto de teixo; lança de javali (aumento de passo no primeiro ataque da cena — use "Passo" nos controles).',
+ r:[['Rhiona',1,'Dever. A ferreira é importante para a vila e deve ser protegida.'],['Muirenn',2,'Cumplicidade. Têm em comum o modo de vida apartado da vila.'],['Cavan',0,'Neutro. O monge traz bons conselhos aos camponeses.'],['Malik',0,'Neutro. O jeito bisbilhoteiro do andarilho não chega a incomodar.'],['Sira',0,'Neutro. Só se viram uma vez.'],['Sorcha',0,'Neutro. Acha os rastros da passagem dela chamativos demais.'],['Cormac',1,'Tranquilidade. Sabe de onde ele vem pelos espinhos nas roupas.']]},
+{id:'muirenn',n:'Muirenn',s:'da Lua Pálida',p:'Executor',v:'Herborista',F:8,M:8,E:8,pv:15,pd:17,apt:'Folclore',imp:1,
+ sk:[4,4,8,6,8,4,6,4,4,6,6,6,4,8,4,4,4,4,8,6],
+ h:[...IMPETO,{n:'Arsenal de Herborista',t:'Bolsa com preparados medicinais (uso único). Escolha um alvo e gaste uma ação. Tônico de urtiga-feroz: alvo recebe aumento de passo no Físico por uma cena. Bálsamo de confrei: alvo recupera 2d4 PV (precisa ficar parado). Pote de vespa: ataque à distância com Sobrevivência, dano RA+1; se o alvo sobreviver, perde a próxima ação.',b:[['Bálsamo: rolar 2d4 PV','bal']]}],
+ w:[{n:'Faca ritualística (corpo a corpo, RA+0)',sk:'Luta',m:0},{n:'Pote de vespa (distância, Sobrevivência, RA+1)',sk:'Sobrevivência',m:1,r:1}],eq:'Faca ritualística, maleta de medicamentos.',
+ r:[['Rhiona',0,'Neutro. Não gosta de armas de metal, mas sabe que são necessárias.'],['Rowan',2,'Amizade. Ao contrário da vila, não tem medo do lobo.'],['Cavan',0,'Neutro. Desaprova a doutrina escrita do monge, mas não o odeia.'],['Malik',0,'Neutro. O julga tolo, mas não perigoso.'],['Sira',0,'Neutro. Sabe que ela já se recuperou, mas finge debilidade.'],['Sorcha',0,'Neutro. Duvida que a guarda a protegeria de algum perigo.'],['Cormac',0,'Neutro. Só mais um forasteiro sendo bem recebido na vila.']]},
+{id:'cavan',n:'Irmão Cavan',s:'do Mosteiro do Olmo Cinzento',p:'Analista',v:'Professor',F:6,M:10,E:6,pv:15,pd:15,apt:'Erudição',an:1,
+ sk:[6,4,6,10,6,4,8,4,4,8,4,6,8,6,4,6,4,4,4,6],
+ h:[...ANALISE,{n:'Curandeiro',t:'Gaste uma ação e 2 PD para curar um aliado: teste de Medicina (DT 7). Se passar, cura PV iguais à RA do teste. Só uma vez por cena em um mesmo alvo.',b:[['Curar (2 PD + Medicina)','cura']]},{n:'Mentoria',t:'Quando ajuda outro personagem, pode fazer um teste da perícia usada para ajudar contra DT 7. Se passar, o ajudado pode substituir um dos dados rolados por ele pela sua rolagem alta.',b:[]}],
+ w:[{n:'Porrete (corpo a corpo, RA+1)',sk:'Luta',m:1}],eq:'Porrete.',
+ r:[['Rhiona',3,'Grande afeição. Sentimento conflitante com seus votos monásticos.'],['Rowan',0,'Neutro. Espera um dia poderem conversar melhor.'],['Muirenn',0,'Neutro. Desaprova a tradição da curandeira, mas não a odeia.'],['Malik',1,'Admiração. Interesse pelo conhecimento trazido de outras terras.'],['Sira',0,'Neutro. Aguarda ela se recuperar do naufrágio.'],['Sorcha',0,'Neutro. Acredita que ela já sofreu muito.'],['Cormac',1,'Discrição. Reconhece seu sotaque de nobre bretão, mas não contou a ninguém.']]},
+{id:'malik',n:'Malik',s:'ibn Qamar',p:'Executor',v:'Explorador',F:6,M:6,E:10,pv:15,pd:19,apt:'Erudição',imp:1,
+ sk:[4,4,8,6,4,4,6,4,4,6,4,4,4,4,4,10,6,8,6,4],
+ h:[...IMPETO,{n:'Ímpeto Fervilhante',t:'No início de cada cena, você preenche um espaço da sua barra de ímpeto (use "Nova cena").',b:[]}],
+ w:[{n:'Arco composto de Al-Andalus (distância, RA+1)',sk:'Pontaria',m:1,r:1}],eq:'Arco composto de Al-Andalus, diário de viagem.',
+ r:[['Rhiona',0,'Neutro. Gosta de tê-la como ouvinte de suas histórias.'],['Rowan',0,'Neutro. Interessado em seu lobo e nas superstições que o cercam.'],['Muirenn',1,'Admiração. Fascinado por seu conhecimento ancestral exótico.'],['Cavan',1,'Admiração. Fascinado por sua caligrafia e didática.'],['Sira',1,'Curiosidade. Enche-a de perguntas pessoais em toda oportunidade.'],['Sorcha',0,'Neutro. Sente-se oprimido pelo olhar desconfiado dela.'],['Cormac',1,'Curiosidade. Admira seu vocabulário.']]},
+{id:'sira',n:'Sira',s:'Cissé',p:'Vigilante',v:'Viking',F:8,M:6,E:8,pv:20,pd:12,apt:'Erudição',
+ sk:[6,4,6,6,4,8,4,4,10,4,4,4,8,4,4,6,4,4,4,6],
+ h:[PRONT('Prontidão'),{n:'Antecipação Tática',t:'No início de qualquer combate, gaste 2 PD. Se fizer isso, ganha uma rodada na qual pode agir antes dos demais personagens e NPCs.',b:[['Gastar 2 PD','pd2']]},{n:'Sorrateiro',t:'Ao fazer um teste de Crime ou Furtividade, gaste 3 PD para receber +d8 no teste.',b:[['3 PD: +d8 no próximo teste','sorr']]}],
+ w:[{n:'Machado de batalha nórdico (corpo a corpo, RA+3)',sk:'Luta',m:3}],eq:'Machado de batalha nórdico.',
+ r:[['Rhiona',1,'Anseio. Deseja usar o poder social da ferreira para voltar ao mar.'],['Rowan',0,'Neutro. Só se viram uma vez.'],['Muirenn',1,'Gratidão. A curandeira tratou suas feridas após o naufrágio.'],['Cavan',1,'Anseio. Deseja usar o poder religioso do monge para voltar ao mar.'],['Malik',0,'Neutro. Não gosta de suas perguntas desnecessárias.'],['Sorcha',1,'Respeito. Reconhece a força da guerreira.'],['Cormac',1,'Empatia. Suspeita que o jovem esteja escondendo algo.']]}
+];
+
+const LES=[[4,'Morte Súbita','Você morre! Hora de criar um personagem novo.'],[9,'Morte Lenta','Recupera 1 PV e age uma última vez; ao fim da rodada seguinte, morre.'],[10,'Laceração Profunda','Perde 2 PV (acumulativa).'],[11,'Sem Olho','−1 em Percepção e Pontaria.'],[12,'Sem Mão','Só empunha um item; tarefas de duas mãos: −1 passo ou falha.'],[13,'Sem Pé','Duas reduções de passo em movimentar-se e perseguições a pé.'],[14,'Tendão Comprometido','−2 em Acrobacia.'],[15,'Músculo Comprometido','−2 em Atletismo.'],[16,'Órgão Interno Comprometido','−2 em Vigor.'],[17,'Órgão Sensorial Comprometido','−2 em Percepção.'],[18,'Cicatriz Assustadora','−2 em Persuasão, +1 em Intimidar.'],[19,'Contusão','Físico −1 passo até o fim da cena.'],[99,'Surto de Adrenalina','Sem sequelas; recupera 1 PV!']];
+const TRA=[[4,'Colapso Total','Hora de criar um novo personagem.'],[6,'Estresse Pós-Traumático','Sempre que sofrer dano emocional, aumenta o dano em +1.'],[8,'Degradação Cognitiva','−1 em Mente.'],[10,'Mácula Psíquica','−1 em Emoção.'],[12,'Chaga da Alma','Perde 2 PD.'],[14,'Retração Defensiva','−2 em Persuasão e Intuição.'],[17,'Pânico','Recebe um dado de pavor.'],[19,'Estupor Catatônico','Perde a ação na próxima rodada.'],[99,'Injeção de Ânimo','Sem sequelas; recupera 1 PD!']];
+const FC=['Vexame: descreva a ação de forma vergonhosa (sem efeito em regras).','Machucado: Físico −1 passo até o fim da cena.','Desatenção: Mente −1 passo até o fim da cena.','Irritação: Emoção −1 passo até o fim da cena.','Acidente: perde d4 PV.','Frustração: perde d4 PD.','Perda: um item ou espaço de compra se perde.','Nenhum efeito adicional.'];
+const tbl=(t,n)=>t.find(x=>n<=x[0]);
+
+const S={};
+C.forEach(c=>{S[c.id]={pv:c.pv,pvM:c.pv,pd:c.pd,pdM:c.pd,arm:0,at:{F:c.F,M:c.M,E:c.E},sk:[...c.sk],mk:0,imp:c.imp||0,les:0,tra:0,pav:0,bonus:[],step:0,up:false,lobo:true,ru:{},log:[],last:{},eq:null,dt:7}});
+let active='rhiona',cur=null;
+const A=()=>C.find(c=>c.id===active),ST=()=>S[active];
+const L=(st,t,k)=>{st.log.unshift([t,k||'']);st.log=st.log.slice(0,10)};
+
+/* ---------- motor de testes ---------- */
+function calc(e){
+  const v=e.dice.map(x=>x.v),p=e.p||0;
+  e.an=v.map(x=>x<p);
+  const act=v.filter((x,i)=>!e.an[i]).sort((a,b)=>b-a);
+  e.sum=sum(act.slice(0,3));
+  const so=[...v].sort((a,b)=>b-a);
+  e.ra=so[0];e.rb=so[so.length-1];e.sec=so[1]||0;
+  const cv=so.length===4?so.slice(0,3):so;
+  e.cs=cv.some((x,i)=>x>=6&&cv.indexOf(x)!==i);
+  e.cf=(p>0&&act.length===0)||v.every(x=>x===1);
+  e.ok=e.cf?false:e.cs?true:e.dt!=null?e.sum>=e.dt:null;
+}
+function roll(o){
+  const c=A(),st=ST(),up=st.up?1:0;
+  const dice=[{d:stp(o.ad,st.step+up),t:AN[o.a]},{d:stp(o.sd,st.step),t:o.label}];
+  [...st.bonus,...(o.extra||[])].forEach(b=>{if(dice.length<4)dice.push({d:b.d,t:b.t||'Bônus',k:b.k})});
+  dice.forEach(x=>x.v=rd(x.d));
+  const e={label:o.label,dice,p:st.pav?rd(st.pav):0,pd:st.pav,dt:o.dt,notes:[],c:c.id};
+  st.bonus=[];st.step=0;
+  if(st.pav&&e.p===1){st.pav=0;e.notes.push('Dado de pavor = 1: o efeito de medo termina.')}
+  calc(e);
+  const lb=dice.find(x=>x.k==='lobo');
+  if(lb&&lb.v===1){st.lobo=false;e.notes.push('O dado do lobo rolou 1: Espectro ficou machucado e não ajuda mais nesta cena.')}
+  if(e.ok===false&&c.imp!==undefined&&st.imp<5){st.imp++;e.notes.push('Falha: +1 espaço na barra de ímpeto.')}
+  if(e.cf){const r=rd(8);let t=FC[r-1];e.notes.push('Falha crítica (d8='+r+') — '+t);
+    if(r===5){const x=rd(4);st.pv=Math.max(0,st.pv-x);e.notes.push('Aplicado: −'+x+' PV.')}
+    if(r===6){const x=rd(4);st.pd=Math.max(0,st.pd-x);e.notes.push('Aplicado: −'+x+' PD.')}}
+  if(o.post)o.post(e,st);
+  cur={e,c,st,o};logRoll(e,st);
+  return e;
+}
+function logRoll(e,st){
+  const vs=e.dice.map((d,i)=>(e.an[i]?'<s>'+d.v+'</s>':d.v)+'<sub>d'+d.d+'</sub>').join(' + ');
+  const v=e.cf?'FALHA CRÍTICA':e.cs?'SUCESSO CRÍTICO':e.ok===null?'':e.ok?'passou':'falhou';
+  L(st,'<b>'+esc(e.label)+'</b> — '+vs+(e.p?' (pavor '+e.p+')':'')+' = <b>'+e.sum+'</b>'+(e.dt!=null?' vs DT '+e.dt:'')+' '+v+(e.dmg!=null?' · dano '+e.dmg:'')+(e.heal!=null?' · cura '+e.heal:''),e.ok===true?'ok':e.ok===false?'no':'');
+  if(e.notes.length)L(st,esc(e.notes.join(' ')));
+  st.last[e.label]=e.sum;
+}
+function modal(){
+  if(!cur)return;
+  const {e,c,st}=cur;
+  const adj=c.an&&st.mk>0;
+  const dh=e.dice.map((d,i)=>'<div class="die'+(e.an[i]?' an':'')+'"><div class="s">'+d.v+'</div><span>'+esc(d.t)+' d'+d.d+'</span>'+(adj?'<span><button class="btn sm" data-a="adj" data-i="'+i+'" data-s="-1">−</button> <button class="btn sm" data-a="adj" data-i="'+i+'" data-s="1">+</button></span>':'')+'</div>').join('')+(e.p?'<div class="die pv"><div class="s">'+e.p+'</div><span>Pavor d'+e.pd+'</span></div>':'');
+  const v=e.cf?'Falha crítica!':e.cs?'Sucesso crítico!':e.ok===null?'Teste oposto — compare com o oponente':e.ok?'Passou':'Falhou';
+  mb.innerHTML='<p class="tt">'+esc(e.label)+'</p><div class="dice">'+dh+'</div><div class="tot"><div class="n">'+e.sum+'</div><div class="verd '+(e.ok===false?'no':e.ok?'ok':'')+'">'+v+(e.dt!=null?' (DT '+e.dt+')':'')+'</div>'+
+  (adj?'<div class="note">Marcadores de análise: '+st.mk+'</div>':'')+
+  (e.dmg!=null?'<div class="note">Dano: <b>'+e.dmg+'</b>'+(e.cs?' (crítico: soma as duas maiores rolagens)':'')+'</div>':'')+
+  (e.heal!=null?'<div class="note">Cura <b>'+e.heal+'</b> PV no aliado</div>':'')+
+  e.notes.map(n=>'<div class="note">'+esc(n)+'</div>').join('')+'</div>';
+  ov.classList.add('show');
+}
+
+/* ---------- ações ---------- */
+function rollSkill(i,dt){const c=A(),st=ST(),a=PER[i][1];
+  roll({a,ad:st.at[a],sd:st.sk[i],label:skName(c,i),dt:dt??st.dt});modal();render()}
+const skName=(c,i)=>i===2&&c.apt?'Aptidão ('+c.apt+')':i===14&&c.ofi?'Ofício ('+c.ofi+')':PER[i][0];
+function attack(wi){const c=A(),st=ST(),w=c.w[wi],i=IDX(w.sk),a=PER[i][1];
+  const dt=7+(st.longo?3:0)+(st.cob?3:0);
+  const extra=(c.id==='rowan'&&!w.r&&st.lobo)?[{d:6,t:'Lobo',k:'lobo'}]:[];
+  roll({a,ad:st.at[a],sd:st.sk[i],label:'Ataque: '+w.n.split(' (')[0],dt,extra,post:e=>{e.dmg=e.ok?e.ra+(e.cs?e.sec:0)+w.m:0}});modal();render()}
+function defend(i){const st=ST(),a=PER[i][1];st.bonus.push({d:6,t:'Defender-se'});
+  roll({a,ad:st.at[a],sd:st.sk[i],label:'Defender-se ('+PER[i][0]+') — oposto',dt:null});modal();render()}
+function lesao(){const st=ST(),dt=7+3*st.les;st.les++;
+  roll({a:'F',ad:st.at.F,sd:st.sk[19],label:'Teste de lesão',dt,post:(e,st)=>{
+    if(e.cs){st.pv=Math.max(st.pv,1);e.notes.push('Sucesso crítico: recupera 1 PV (e se recupera de inconsciente/moribundo).')}
+    else if(e.ok)e.notes.push('Resultado: fica inconsciente e moribundo (teste de lesão ao fim de cada rodada).');
+    else if(e.cf)e.notes.push('Falha crítica: morre! Hora de criar um personagem novo.');
+    else e.notes.push('Falha: sofre uma lesão — use "Rolar lesão".')}});modal();render()}
+function trauma(){const st=ST(),dt=7+3*st.tra;st.tra++;
+  roll({a:'E',ad:st.at.E,sd:st.sk[6],label:'Teste de trauma',dt,post:e=>{e.notes.push(e.ok?'Passou: nenhum efeito.':'Falhou: sofre um trauma — use "Rolar trauma".')}});modal();render()}
+function table(kind){const st=ST(),t=kind==='les'?LES:TRA,r=rd(20),n=tbl(t,r);
+  let x='';
+  if(kind==='les'){if(n[1]==='Laceração Profunda'){st.pv=Math.max(0,st.pv-2);x=' (−2 PV aplicados)'}if(n[1]==='Morte Lenta'||n[1]==='Surto de Adrenalina'){st.pv=Math.min(st.pvM,st.pv+1);x=' (+1 PV aplicado)'}}
+  else{if(n[1]==='Chaga da Alma'){st.pd=Math.max(0,st.pd-2);x=' (−2 PD aplicados)'}if(n[1]==='Injeção de Ânimo'){st.pd=Math.min(st.pdM,st.pd+1);x=' (+1 PD aplicado)'}if(n[1]==='Pânico'){st.pav=st.pav?stp(st.pav,1):6;x=' (dado de pavor d'+st.pav+')'}}
+  L(st,'<b>'+(kind==='les'?'Lesão':'Trauma')+'</b> d20 = '+r+' (nível 3: iniciante, sem bônus) → <b>'+n[1]+'</b>: '+n[2]+x,'no');render()}
+function dano(){const st=ST(),v=Math.max(0,parseInt($('#dv').value)||0),k=$('#dk').value,ua=$('#da').checked&&st.arm>0;
+  let t=v;if(ua){t=Math.max(0,v-10);st.arm--}
+  const f=k==='f'?'pv':'pd';st[f]=Math.max(0,st[f]-t);
+  L(st,'Dano '+(k==='f'?'físico':'emocional')+': '+v+(ua?' − 10 (armadura) ':' ')+'= <b>'+t+'</b> → '+f.toUpperCase()+' '+st[f]+'/'+st[f+'M']+(st[f]===0?' — <b>chegou a 0: faça o teste de '+(k==='f'?'lesão':'trauma')+'!</b>':''),'no');render()}
+function equil(){const st=ST();st.eq={res:{4:2,6:3,8:4,10:5,12:6}[st.sk[0]],r:null,m:''};render()}
+function eqRoll(){const q=ST().eq;q.r=[rd(10),rd(10)];q.m='Rolou 2d10: '+q.r.join(' e ');render()}
+function eqUse(){const q=ST().eq;if(!q.r||q.res<1)return;const x=rd(4);q.res--;
+  const o1=[q.r[0]+x,q.r[1]],o2=[q.r[0],q.r[1]+x];q.r=Math.abs(o1[0]-o1[1])<=Math.abs(o2[0]-o2[1])?o1:o2;q.m='Dado de equilíbrio d4 = '+x+' somado ao melhor d10 → '+q.r.join(' e ');render()}
+const eqOk=q=>q.r&&Math.abs(q.r[0]-q.r[1])<=1;
+
+const ACT={
+ tab:d=>{active=d.id;render()},
+ close:()=>ov.classList.remove('show'),
+ roll:d=>rollSkill(+d.i),atk:d=>attack(+d.i),def:d=>defend(+d.i),les:lesao,tra:trauma,tbl:d=>table(d.k),dmg:dano,
+ pip:d=>{const st=ST(),k=d.k;st[k]=(+d.i===st[k])?+d.i-1:+d.i;render()},
+ mkpip:d=>{const st=ST(),k=d.k;st[k]=(+d.i===st[k])?+d.i-1:+d.i;render()},
+ adj:d=>{const {e,st}=cur;if(st.mk<1)return;const x=e.dice[+d.i],n=x.v+ +d.s;if(n<1||n>x.d)return;x.v=n;st.mk--;calc(e);modal();render()},
+ an2:()=>{const st=ST();st.mk=Math.min(4,st.mk+2);L(st,'Análise: +2 marcadores ('+st.mk+'/4).');render()},
+ an1:()=>{const st=ST();st.mk=Math.min(4,st.mk+1);L(st,'Leitura de Combate: +1 marcador ('+st.mk+'/4).');render()},
+ pd2:()=>{const st=ST();st.pd=Math.max(0,st.pd-2);L(st,'Habilidade usada: −2 PD.');render()},
+ i1:()=>{const st=ST();if(st.imp<1)return;st.imp--;st.bonus.push({d:4,t:'Ímpeto'});render()},
+ i3:()=>{const st=ST();if(st.imp<3)return;st.imp-=3;st.up=true;L(st,'Ímpeto: atributo aumenta em um passo até o fim da cena (aplicado ao dado de atributo).');render()},
+ ix:()=>{const st=ST();if(st.imp<3)return;st.imp-=3;L(st,'Ímpeto: <b>ação extra</b> nesta cena de conflito.');render()},
+ sorr:()=>{const st=ST();if(st.pd<3)return;st.pd-=3;st.bonus.push({d:8,t:'Sorrateiro'});render()},
+ lobo:()=>{const st=ST();st.lobo=!st.lobo;render()},
+ esq:()=>rollSkill(0,null),
+ cura:()=>{const st=ST();if(st.pd<2)return;st.pd-=2;const i=13;roll({a:'M',ad:st.at.M,sd:st.sk[i],label:'Curandeiro (Medicina)',dt:7,post:e=>{e.heal=e.ok?e.ra:0}});modal();render()},
+ bal:()=>{const st=ST(),a=rd(4),b=rd(4);L(st,'Bálsamo de confrei: 2d4 = '+a+' + '+b+' = <b>'+(a+b)+' PV</b> no alvo.','ok');render()},
+ bon:()=>{ST().bonus.push({d:+$('#bd').value,t:'Bônus'});render()},
+ bclr:()=>{const st=ST();st.bonus=[];st.step=0;st.up=false;render()},
+ pav:()=>{const st=ST();st.pav=st.pav?stp(st.pav,1):6;render()},
+ pavdn:()=>{const st=ST();if(!st.pav||st.pd<1)return;st.pd--;st.pav=st.pav===4?0:stp(st.pav,-1);L(st,'Controlando o pavor: −1 PD, dado de pavor reduzido.');render()},
+ pavbon:()=>{const st=ST();if(!st.pav||st.pd<5)return;st.pd-=5;st.bonus.push({d:st.pav,t:'Pavor abraçado'});st.pav=0;L(st,'Abraçando o pavor: −5 PD, o dado de pavor virou dado bônus.');render()},
+ pavoff:()=>{ST().pav=0;render()},
+ inv:d=>{const c=A(),st=ST(),r=c.r[+d.i],g=r[1],X={1:6,2:8,3:12}[g],o=$('#rs'+d.i).value;
+  st.ru[r[0]]=1;
+  if(o==='t'){st.bonus.push({d:X,t:'Relação ('+r[0]+')'});L(st,'Invocou a relação com <b>'+r[0]+'</b>: +d'+X+' no próximo teste relacionado a essa pessoa.')}
+  if(o==='h'){const v=rd(X);L(st,'Invocou a relação com <b>'+r[0]+'</b> ao ajudar: fornece +d'+X+' ao teste dela(e) = <b>'+v+'</b> (além do aumento de passo da ação ajudar).')}
+  if(o==='m'){const n=g===2?4:6,a=rd(n),b=rd(n);L(st,'Invocou a relação com <b>'+r[0]+'</b>: motiva a pessoa (ação) — recupera 2d'+n+' = '+a+' + '+b+' = <b>'+(a+b)+' PD</b>.')}
+  if(o==='x')L(st,'Invocou a relação com <b>'+r[0]+'</b>: ação extra no turno, usada para ajudar a pessoa em perigo.');
+  render()},
+ scene:()=>{const c=A(),st=ST();st.les=0;st.tra=0;st.mk=0;st.up=false;st.imp=c.imp===undefined?0:(c.id==='malik'?1:0);st.bonus=[];st.step=0;L(st,'<i>Nova cena: contadores de lesão/trauma zerados, marcadores/ímpeto reiniciados'+(c.id==='malik'?' (Ímpeto Fervilhante: +1 espaço)':'')+'.</i>');render()},
+ mission:()=>{ST().ru={};render()},
+ clr:()=>{ST().log=[];render()},
+ eqs:equil,eqr:eqRoll,equ:eqUse
+};
+document.addEventListener('click',ev=>{const a=ev.target.closest('[data-a]');if(a&&ACT[a.dataset.a]){ACT[a.dataset.a](a.dataset)}else if(ev.target===ov)ACT.close()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')ACT.close()});
+document.addEventListener('change',ev=>{const t=ev.target,k=t.dataset.c;if(!k)return;const st=ST(),v=+t.value;
+  if(k==='at')st.at[t.dataset.k]=v;else if(k==='sk')st.sk[+t.dataset.i]=v;
+  else if(k==='res'){st[t.dataset.k]=Math.max(0,v);if(t.dataset.k==='pvM'||t.dataset.k==='pdM'){st[t.dataset.k]=Math.max(1,v);const f=t.dataset.k.slice(0,2);st[f]=Math.min(st[f],st[t.dataset.k])}else{const f=t.dataset.k;if(f!=='arm')st[f]=Math.min(st[f],st[f+'M'])}}
+  else if(k==='step')st.step=v;else if(k==='dt')st.dt=v||7;else if(k==='flag')st[t.dataset.k]=t.checked;
+  render()});
+
+/* ---------- render ---------- */
+const $=s=>document.querySelector(s),ov=$('#ov'),mb=$('#mb');
+const dsel=(cur,at)=>D.map(d=>'<option value="'+d+'"'+(d===cur?' selected':'')+'>d'+d+'</option>').join('');
+const pips=(k,n,cur,cls,ex)=>'<div class="pips">'+Array.from({length:n},(_,i)=>'<div class="pip '+cls+(i<cur?' on':'')+(ex||'')+'" data-a="'+(cls==='pv'||cls==='pd'?'pip':'mkpip')+'" data-k="'+k+'" data-i="'+(i+1)+'"></div>').join('')+'</div>';
+
+function render(){
+  const y=scrollY;
+  $('#tabs').innerHTML=C.map(c=>'<button class="tab'+(c.id===active?' on':'')+'" data-a="tab" data-id="'+c.id+'">'+esc(c.n.replace('Irmão ',''))+'</button>').join('')+'<button class="tab'+(active==='ref'?' on':'')+'" data-a="tab" data-id="ref">Regras</button>';
+  $('#root').innerHTML=active==='ref'?ref():sheet();
+  scrollTo(0,y);
+}
+function sheet(){
+  const c=A(),st=ST();
+  const bonus=st.bonus.map(b=>'<span class="chip">+d'+b.d+' '+esc(b.t)+'</span>').join('')+(st.up?'<span class="chip">atributo +1 passo (cena)</span>':'');
+  return `
+<div class="identity">
+ <div><div class="lbl">Nome</div><div class="nm">${esc(c.n)} <small>${esc(c.s)}</small></div></div>
+ <div><div class="lbl">Perfil</div><div class="v">${c.p}</div></div>
+ <div><div class="lbl">Vocação</div><div class="v">${c.v}</div></div>
+ <div><div class="lbl">Nível</div><div class="v">3</div></div>
+</div>
+<div class="ctrl">
+ <label>DT dos testes <input type="number" value="${st.dt}" data-c="dt" min="1"></label>
+ <label>Passo no teste <select data-c="step">${[-2,-1,0,1,2].map(v=>'<option value="'+v+'"'+(v===st.step?' selected':'')+'>'+(v>0?'+':'')+v+'</option>').join('')}</select></label>
+ <label>Dado bônus <select id="bd">${D.map(d=>'<option value="'+d+'">d'+d+'</option>').join('')}</select><button class="btn sm" data-a="bon">+ Adicionar</button></label>
+ <span>Próxima rolagem: ${bonus||'—'} <button class="btn sm" data-a="bclr">limpar</button></span>
+ <span style="width:100%;font-size:.75rem;color:var(--faint)">Máx. 4 dados por teste; somam-se os 3 maiores. Aumento/redução de passo vale para o dado de atributo e o de perícia.</span>
+</div>
+<div class="grid"><div>
+ <div class="panel"><h2>Atributos</h2>
+  ${['F','M','E'].map(a=>'<div class="row sp"><span>'+AN[a]+'</span><select data-c="at" data-k="'+a+'">'+dsel(st.at[a])+'</select></div>').join('')}
+ </div>
+ <div class="panel"><h2>Recursos</h2>
+  <div class="row sp"><span>Pontos de Vida</span><span><input type="number" value="${st.pv}" data-c="res" data-k="pv"> / <input type="number" value="${st.pvM}" data-c="res" data-k="pvM"></span></div>${pips('pv',st.pvM,st.pv,'pv')}
+  <div class="row sp" style="margin-top:12px"><span>Pontos de Determinação</span><span><input type="number" value="${st.pd}" data-c="res" data-k="pd"> / <input type="number" value="${st.pdM}" data-c="res" data-k="pdM"></span></div>${pips('pd',st.pdM,st.pd,'pd')}
+  <div class="row sp" style="margin-top:12px"><span>Pontos de armadura</span><input type="number" value="${st.arm}" data-c="res" data-k="arm"></div>
+  <h3>Sofrer dano</h3>
+  <div class="row"><input type="number" id="dv" value="0" min="0"><select id="dk"><option value="f">Físico (PV)</option><option value="e">Emocional (PD)</option></select><label style="font-size:.8rem"><input type="checkbox" id="da" ${st.arm?'':'disabled'}> Gastar armadura (−10)</label><button class="btn sm" data-a="dmg">Aplicar</button></div>
+  <h3>Estado e cenas</h3>
+  <div class="row"><button class="btn sm" data-a="les">Teste de lesão (DT ${7+3*st.les})</button><button class="btn sm" data-a="tbl" data-k="les">Rolar lesão</button><button class="btn sm" data-a="tra">Teste de trauma (DT ${7+3*st.tra})</button><button class="btn sm" data-a="tbl" data-k="tra">Rolar trauma</button></div>
+  <div class="row"><button class="btn sm" data-a="scene">Nova cena</button><button class="btn sm" data-a="mission">Nova missão (relações)</button></div>
+ </div>
+ <div class="panel"><h2>Dado de Pavor</h2>
+  <div class="row sp"><span>${st.pav?'<span class="chip">d'+st.pav+' ativo</span>':'Sem pavor'}</span><button class="btn sm" data-a="pav">${st.pav?'Pavor de novo (+1 passo)':'Receber pavor (d6)'}</button></div>
+  <div class="row"><button class="btn sm" data-a="pavdn" ${st.pav&&st.pd>0?'':'disabled'}>Controlar: −1 passo (1 PD)</button><button class="btn sm" data-a="pavbon" ${st.pav&&st.pd>=5?'':'disabled'}>Abraçar: vira bônus (5 PD)</button><button class="btn sm" data-a="pavoff">Encerrar</button></div>
+  <p class="note" style="text-align:left">Rolado junto de todo teste; anula dados menores que ele (se anular todos: falha crítica). Se o resultado for 1, o efeito termina.</p>
+ </div>
+ <div class="panel"><h2>Habilidades</h2>
+  ${c.h.map(h=>'<div class="hab"><b>'+h.n+'</b><p>'+h.t+'</p>'+habUi(h,c,st)+'</div>').join('')}
+  ${c.an?'<div class="row sp"><span class="lbl">Marcadores de análise</span></div>'+pips('mk',4,st.mk,'mk'):''}
+  ${c.imp!==undefined?'<div class="row sp"><span class="lbl">Barra de ímpeto</span></div>'+pips('imp',5,st.imp,'im',' big'):''}
+ </div>
+</div><div>
+ <div class="panel"><h2>Combate</h2>
+  <div class="row" style="font-size:.82rem;color:var(--dim)"><label><input type="checkbox" data-c="flag" data-k="longo" ${st.longo?'checked':''}> Alcance longo (DT +3)</label><label><input type="checkbox" data-c="flag" data-k="cob" ${st.cob?'checked':''}> Cobertura leve (DT +3)</label></div>
+  ${c.w.map((w,i)=>'<div class="row sp"><span>'+w.n+'</span><button class="roll" data-a="atk" data-i="'+i+'">Atacar</button></div>').join('')}
+  <div class="row"><button class="btn sm" data-a="def" data-i="0">Defender-se (Acrobacia +d6)</button><button class="btn sm" data-a="def" data-i="12">Defender-se (Luta +d6)</button></div>
+  <p class="note" style="text-align:left">DT de ataque 7. Dano = RA + modificador da arma; crítico soma também a 2ª maior rolagem. Equipamento: ${esc(c.eq)}</p>
+ </div>
+ <div class="panel"><h2>Perícias</h2>
+  ${PER.map((p,i)=>'<div class="per"><span>'+esc(skName(c,i))+'</span><span class="tag">'+AN[p[1]]+' d'+st.at[p[1]]+'</span><select data-c="sk" data-i="'+i+'">'+dsel(st.sk[i])+'</select><button class="roll" data-a="roll" data-i="'+i+'">Rolar</button><span class="res">'+(st.last[skName(c,i)]??'—')+'</span></div>').join('')}
+ </div>
+ <div class="panel"><h2>Relações</h2>
+  <p class="note" style="text-align:left;margin-top:0">Cada relação só pode ser invocada uma vez por missão. Descreva o que sente pela pessoa e como isso o ajuda.</p>
+  ${c.r.map((r,i)=>relUi(r,i,st)).join('')}
+ </div>
+ ${eqUi(st)}
+ <div class="panel"><h2>Registro</h2><div class="row"><button class="btn sm" data-a="clr">Limpar</button></div>
+  <div class="log">${st.log.length?st.log.map(l=>'<div class="le '+l[1]+'">'+l[0]+'</div>').join(''):'<div class="le">Nenhuma rolagem ainda.</div>'}</div></div>
+</div></div>`;
+}
+function habUi(h,c,st){
+  return h.b.length?'<div class="row">'+h.b.map(b=>{let off='';if(b[1]==='lobo')return '<button class="btn sm" data-a="lobo">Lobo: '+(st.lobo?'pronto':'machucado')+'</button>';
+   if(b[1]==='cura'&&st.pd<2||b[1]==='pd2'&&st.pd<2||b[1]==='sorr'&&st.pd<3||(b[1]==='i1'&&st.imp<1)||((b[1]==='i3'||b[1]==='ix')&&st.imp<3))off='disabled';
+   return '<button class="btn sm" data-a="'+b[1]+'" '+off+'>'+b[0]+'</button>'}).join('')+'</div>':'';
+}
+function relUi(r,i,st){
+  const g=r[1],used=st.ru[r[0]];
+  const opts=g?'<option value="t">+d'+{1:6,2:8,3:12}[g]+' em um teste</option><option value="h">Ajudar: +d'+{1:6,2:8,3:12}[g]+'</option>'+(g>=2?'<option value="m">Motivar: recupera '+(g===2?'2d4':'2d6')+' PD</option>':'')+(g===3?'<option value="x">Ação extra (ajudar)</option>':''):'';
+  return '<div class="rel"><div class="row sp"><span><b>'+r[0]+'</b> <span class="g">'+'●'.repeat(g)+'○'.repeat(3-g)+'</span></span>'+(g?'<span><select id="rs'+i+'" '+(used?'disabled':'')+'>'+opts+'</select> <button class="btn sm" data-a="inv" data-i="'+i+'" '+(used?'disabled':'')+'>'+(used?'Invocada':'Invocar')+'</button></span>':'<span class="tag">neutro</span>')+'</div><div class="t">'+esc(r[2])+'</div></div>';
+}
+function eqUi(st){
+  const q=st.eq;
+  return '<div class="panel"><h2>Ferramenta: Equilíbrio</h2>'+(!q?'<p class="note" style="text-align:left;margin-top:0">Role 2d10: se forem iguais ou com 1 de diferença, você se equilibra; 2+ de diferença, começa a cair. Dados de equilíbrio (d4) = metade da sua Acrobacia.</p><button class="btn sm" data-a="eqs">Iniciar travessia</button>':
+  '<div class="row"><span class="chip">Dados de equilíbrio: '+q.res+'d4</span><button class="btn sm" data-a="eqr">Rolar 2d10</button><button class="btn sm" data-a="equ" '+(q.r&&!eqOk(q)&&q.res>0?'':'disabled')+'>Gastar d4</button><button class="btn sm" data-a="eqs">Reiniciar</button></div>'+(q.r?'<div class="verd '+(eqOk(q)?'ok':'no')+'">'+q.m+' — '+(eqOk(q)?'equilibrado':'começando a cair!')+'</div>':''))+'</div>';
+}
+function ref(){return `
+<div class="panel"><h2>Resumo das regras (pp. 10–25)</h2>
+<details open><summary>Testes</summary><ul><li>Role o dado do atributo + o dado da perícia e some. Igual ou maior que a DT (padrão 7) = sucesso.</li><li>Crítico: dois ou mais dados iguais com valor ≥ 6 → sucesso automático (em ataques/estendidos soma a 2ª maior rolagem). Com 4 dados, descarte o menor antes.</li><li>Falha crítica: todos os dados 1 → falha automática + d8 de efeitos.</li><li>Máx. 4 dados por teste, somando só os 3 maiores. Passos: d4 &lt; d6 &lt; d8 &lt; d10 &lt; d12.</li><li>Ajuda: gaste uma ação, perícia com ao menos d6: d6/d8 = 1 aumento de passo; d10/d12 = 2.</li></ul></details>
+<details><summary>Combate — fases da rodada</summary><ul><li>1ª fase geral (qualquer ação exceto ataques) → 2ª ataques à distância → 3ª ataques corpo a corpo (inclui manobras). Uma ação por rodada; quem age numa fase não age nas seguintes (exceto Prontidão).</li><li>Ações dentro da mesma fase são simultâneas.</li><li>Gerais: Atrapalhar (teste oposto a Percepção), Defender-se (Acrobacia/Luta +d6 oposto ao ataque), Erguer-se, Fintar (Enganação × Intuição → 2 passos no próximo ataque), Jogar-se no chão, Mirar (+d6 no próximo ataque à distância), Preparar, Sacar/Guardar item, Usar habilidade/item.</li><li>Ataque: DT 7 (+3 alcance longo). Atirar em corpo a corpo: 2 reduções de passo (ou role d6: ímpar acerta o outro). Ataques corpo a corpo opostos: maior resultado acerta; empate = ambos acertam.</li></ul></details>
+<details><summary>Manobras (ataque corpo a corpo oposto a Acrobacia/Luta)</summary><ul><li>Agarrar (imóvel, −1 passo em ataques). Derrubar (vence por 5+: dano = RB). Desarmar (5+: pega o item). Empurrar (5+: −1 passo no próximo teste). Quebrar (dano no item).</li></ul></details>
+<details><summary>Situações</summary><ul><li>Caído: −1 passo em testes físicos; ataques corpo a corpo contra ele +1 passo (à distância DT +3). Cobertura leve: DT +3. Ocultação leve: −1 passo nos ataques inimigos; total: −2.</li><li>Zonas: mover na mesma zona = ação livre (1×/rodada); outra zona = ação padrão. Vantagem tática: +1 passo no ataque.</li></ul></details>
+<details><summary>Lesões e traumas</summary><ul><li>Ao chegar a 0 PV: teste de lesão (Físico + Vigor, DT 7, +3 por teste já feito na cena). Falha: d20 na tabela de lesões (+1 por patamar acima de iniciante). Moribundo: teste ao fim de cada rodada.</li><li>Ao chegar a 0 PD: teste de trauma (Emoção + Disciplina, mesma DT). Falha: d20 na tabela de traumas. Efeitos de 5 a 14 duram até serem curados.</li><li>Dano não letal: +d6 no teste de lesão; pode-se trocar letal/não letal com 2 reduções de passo no ataque.</li><li>Armadura (playtest): gaste 1 ponto de armadura como ação livre para reduzir um dano em 10; não se recupera.</li></ul></details>
+<details><summary>Dado de pavor e relações</summary><ul><li>Pavor: d6 rolado junto dos testes, anula resultados menores; 1 encerra o efeito; 1 PD reduz um passo; 5 PD converte em dado bônus.</li><li>Relações: 1 uso por relação por missão. Grau 1: +d6 / ajudar +d6. Grau 2: +d8 / ajudar +d8 / motivar (2d4 PD). Grau 3: +d12 / ajudar +d12 / motivar (2d6 PD) / ação extra para ajudar.</li></ul></details>
+<details><summary>Investigação (resumo)</summary><ul><li>Investigar: escolha um ponto de interesse; Investigar (Observar = dado da perícia vale como valor; Examinar = teste, perde 1 PD se não achar nada) ou Interagir. Recapitular: Intuição DT 10. Compartilhar: aliado faz Inspecionar DT 10.</li><li>Destrancar: dados escondidos alto/baixo/exato; tentativas por rodada por Crime (d4:1, d6:2, d8:3, d10:4, d12:5). Arrombar: 1 PV + Atletismo, acumula RA até a PA. Escalar: acumula pontos (rápida DT 8 soma RA; cautelosa DT 6 soma RB; queda = pontos acumulados em dano). Sustentar: 1 PV + Atletismo com redução de passo por rodada.</li></ul></details>
+</div>`}
+render();
+})();
+</script>
+</body>
+</html>

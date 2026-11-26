@@ -62,16 +62,27 @@ input[type=number]{width:54px;text-align:center}
 .rel .g{color:var(--bone);letter-spacing:2px}.rel .t{color:var(--dim)}
 .ov{position:fixed;inset:0;background:rgba(6,5,4,.74);display:none;align-items:center;justify-content:center;z-index:100;padding:16px}
 .ov.show{display:flex}
-.card{position:relative;background:var(--p);border:1px solid var(--bone);border-radius:8px;padding:28px 34px;min-width:300px;max-width:94vw;text-align:center}
+.card{position:relative;background:var(--p);border:1px solid var(--bone);border-radius:8px;box-shadow:0 20px 60px rgba(0,0,0,.55),0 0 40px rgba(201,164,99,.12);padding:32px 40px 28px;min-width:300px;max-width:90vw;text-align:center;animation:modalIn .25s ease}
+@keyframes modalIn{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
 .card .x{position:absolute;top:6px;right:10px;background:none;border:0;color:var(--faint);font-size:1.4rem}
 .card .tt{font:500 1.15rem 'Oswald',sans-serif;color:var(--bb2);margin:0 0 16px}
-.dice{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-bottom:18px}
-.die{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:.68rem;color:var(--faint)}
-.die .s{width:54px;height:54px;display:flex;align-items:center;justify-content:center;background:var(--p2);border:2px solid var(--bd);border-radius:10px;font:1.4rem 'Oswald',sans-serif;color:var(--tx)}
-.die.an .s{opacity:.35;text-decoration:line-through}
-.die.pv .s{border-color:var(--fail)}
-.tot{border-top:1px solid var(--bs);padding-top:14px}
-.tot .n{font:2.4rem 'Oswald',sans-serif;color:var(--bb2)}
+.dice{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.die-face{width:112px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.die-face .shape{position:relative;width:66px;height:66px;display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,var(--bb),var(--blood));border:0;border-radius:0;font:1.5rem/1 'Oswald',sans-serif;color:#f2e3d0;text-shadow:0 1px 2px rgba(0,0,0,.45);filter:drop-shadow(0 0 1px var(--bb2)) drop-shadow(0 0 3px rgba(224,189,127,.7));transform:rotate(-3deg);transform-style:preserve-3d;perspective:500px;animation:dieRoll3d 1.6s cubic-bezier(.2,.8,.25,1)}
+.die-face .shape.d4{clip-path:polygon(50% 5%,95% 94%,5% 94%);padding-top:10px}
+.die-face .shape.d6{width:58px;height:58px;clip-path:polygon(0 0,100% 0,100% 100%,0 100%)}
+.die-face .shape.d8{clip-path:polygon(50% 4%,96% 50%,50% 96%,4% 50%)}
+.die-face .shape.d10{clip-path:polygon(50% 4%,96% 29%,80% 96%,20% 96%,4% 29%)}
+.die-face .shape.d12{clip-path:polygon(27% 4%,73% 4%,96% 50%,73% 96%,27% 96%,4% 50%)}
+.die-face .shape.d20{clip-path:polygon(50% 4%,87% 22%,96% 68%,68% 96%,32% 96%,4% 68%,13% 22%)}
+.die-face:nth-child(even) .shape{animation-name:dieRoll3dReverse}
+@keyframes dieRoll3d{0%{opacity:0;transform:translateY(-14px) rotateX(0) rotateY(0) rotateZ(-3deg) scale(.8)}45%{opacity:1;transform:translateY(0) rotateX(180deg) rotateY(140deg) rotateZ(7deg) scale(1.04)}100%{transform:translateY(0) rotateX(360deg) rotateY(360deg) rotateZ(-3deg) scale(1)}}
+@keyframes dieRoll3dReverse{0%{opacity:0;transform:translateY(-14px) rotateX(0) rotateY(0) rotateZ(3deg) scale(.8)}45%{opacity:1;transform:translateY(0) rotateX(-180deg) rotateY(-140deg) rotateZ(-7deg) scale(1.04)}100%{transform:translateY(0) rotateX(-360deg) rotateY(-360deg) rotateZ(3deg) scale(1)}}
+.die-face .tag{width:100%;text-align:center;white-space:nowrap;font-size:.68rem;color:var(--faint);letter-spacing:.03em}
+.die-face.an .shape{opacity:.35;text-decoration:line-through}
+.die-face.pv .shape{filter:drop-shadow(0 0 2px var(--fail)) drop-shadow(0 0 5px rgba(179,55,44,.55))}
+.tot{border-top:1px solid var(--bs);padding-top:18px}
+.tot .n{font:2.4rem 'Oswald',sans-serif;color:var(--bb2);text-shadow:0 0 18px rgba(201,164,99,.35)}
 .verd{font:500 .95rem 'Oswald',sans-serif;margin-top:4px}
 .verd.ok{color:var(--ok)}.verd.no{color:var(--fail)}
 .note{font-size:.85rem;color:var(--dim);margin-top:8px}
@@ -188,23 +199,42 @@ function roll(o){
 }
 function logRoll(e,st){
   const vs=e.dice.map((d,i)=>(e.an[i]?'<s>'+d.v+'</s>':d.v)+'<sub>d'+d.d+'</sub>').join(' + ');
-  const v=e.cf?'FALHA CRÍTICA':e.cs?'SUCESSO CRÍTICO':e.ok===null?'':e.ok?'passou':'falhou';
-  L(st,'<b>'+esc(e.label)+'</b> — '+vs+(e.p?' (pavor '+e.p+')':'')+' = <b>'+e.sum+'</b>'+(e.dt!=null?' vs DT '+e.dt:'')+' '+v+(e.dmg!=null?' · dano '+e.dmg:'')+(e.heal!=null?' · cura '+e.heal:''),e.ok===true?'ok':e.ok===false?'no':'');
+  L(st,'<b>'+esc(e.label)+'</b> — '+vs+(e.p?' (pavor '+e.p+')':'')+' = <b>'+e.sum+'</b>'+(e.dmg!=null?' · dano '+e.dmg:'')+(e.heal!=null?' · cura '+e.heal:''));
   if(e.notes.length)L(st,esc(e.notes.join(' ')));
   st.last[e.label]=e.sum;
 }
-function modal(){
+const diceRollAudio=new Audio(encodeURIComponent('AudioTranscriberAI_Rolling Dice HQ Sound Effects (mp3cut.net).mp3'));
+diceRollAudio.preload='auto';
+function playDiceRollSound(){
+  diceRollAudio.currentTime=0;
+  diceRollAudio.play().catch(error=>console.error('Não foi possível reproduzir o áudio dos dados.',error));
+}
+function modal(playSound=true){
   if(!cur)return;
+  clearInterval(rollAnimationTimer);
   const {e,c,st}=cur;
   const adj=c.an&&st.mk>0;
-  const dh=e.dice.map((d,i)=>'<div class="die'+(e.an[i]?' an':'')+'"><div class="s">'+d.v+'</div><span>'+esc(d.t)+' d'+d.d+'</span>'+(adj?'<span><button class="btn sm" data-a="adj" data-i="'+i+'" data-s="-1">−</button> <button class="btn sm" data-a="adj" data-i="'+i+'" data-s="1">+</button></span>':'')+'</div>').join('')+(e.p?'<div class="die pv"><div class="s">'+e.p+'</div><span>Pavor d'+e.pd+'</span></div>':'');
-  const v=e.cf?'Falha crítica!':e.cs?'Sucesso crítico!':e.ok===null?'Teste oposto — compare com o oponente':e.ok?'Passou':'Falhou';
-  mb.innerHTML='<p class="tt">'+esc(e.label)+'</p><div class="dice">'+dh+'</div><div class="tot"><div class="n">'+e.sum+'</div><div class="verd '+(e.ok===false?'no':e.ok?'ok':'')+'">'+v+(e.dt!=null?' (DT '+e.dt+')':'')+'</div>'+
+  const allDice=e.dice.map((d,i)=>({d:d.d,v:d.v,t:d.t,an:e.an[i],i})).concat(e.p?[{d:e.pd,v:e.p,t:'Pavor',pv:true}]:[]);
+  const dh=allDice.map(d=>'<div class="die-face'+(d.an?' an':'')+(d.pv?' pv':'')+'"><div class="shape d'+d.d+'" data-final="'+d.v+'" data-sides="'+d.d+'">'+d.v+'</div><span class="tag">'+esc(d.t)+' d'+d.d+'</span>'+(adj&&!d.pv?'<span><button class="btn sm" data-a="adj" data-i="'+d.i+'" data-s="-1">−</button> <button class="btn sm" data-a="adj" data-i="'+d.i+'" data-s="1">+</button></span>':'')+'</div>').join('');
+  mb.innerHTML='<p class="tt">'+esc(e.label)+'</p><div class="dice">'+dh+'</div><div class="tot"><div class="n">...</div>'+
   (adj?'<div class="note">Marcadores de análise: '+st.mk+'</div>':'')+
   (e.dmg!=null?'<div class="note">Dano: <b>'+e.dmg+'</b>'+(e.cs?' (crítico: soma as duas maiores rolagens)':'')+'</div>':'')+
   (e.heal!=null?'<div class="note">Cura <b>'+e.heal+'</b> PV no aliado</div>':'')+
   e.notes.map(n=>'<div class="note">'+esc(n)+'</div>').join('')+'</div>';
   ov.classList.add('show');
+  const shapes=[...mb.querySelectorAll('.shape')],startedAt=Date.now();
+  rollAnimationTimer=setInterval(()=>{
+    const elapsed=Date.now()-startedAt;
+    shapes.forEach(shape=>{
+      const sides=+shape.dataset.sides;
+      shape.textContent=elapsed>=1500?shape.dataset.final:rd(sides);
+    });
+    if(elapsed>=1500){
+      clearInterval(rollAnimationTimer);
+      mb.querySelector('.tot .n').textContent=e.sum;
+    }
+  },90);
+  if(playSound)playDiceRollSound();
 }
 
 /* ---------- ações ---------- */
@@ -242,11 +272,11 @@ const eqOk=q=>q.r&&Math.abs(q.r[0]-q.r[1])<=1;
 
 const ACT={
  tab:d=>{active=d.id;render()},
- close:()=>ov.classList.remove('show'),
+ close:()=>{clearInterval(rollAnimationTimer);ov.classList.remove('show')},
  roll:d=>rollSkill(+d.i),atk:d=>attack(+d.i),def:d=>defend(+d.i),les:lesao,tra:trauma,tbl:d=>table(d.k),dmg:dano,
  pip:d=>{const st=ST(),k=d.k;st[k]=(+d.i===st[k])?+d.i-1:+d.i;render()},
  mkpip:d=>{const st=ST(),k=d.k;st[k]=(+d.i===st[k])?+d.i-1:+d.i;render()},
- adj:d=>{const {e,st}=cur;if(st.mk<1)return;const x=e.dice[+d.i],n=x.v+ +d.s;if(n<1||n>x.d)return;x.v=n;st.mk--;calc(e);modal();render()},
+ adj:d=>{const {e,st}=cur;if(st.mk<1)return;const x=e.dice[+d.i],n=x.v+ +d.s;if(n<1||n>x.d)return;x.v=n;st.mk--;calc(e);modal(false);render()},
  an2:()=>{const st=ST();st.mk=Math.min(4,st.mk+2);L(st,'Análise: +2 marcadores ('+st.mk+'/4).');render()},
  an1:()=>{const st=ST();st.mk=Math.min(4,st.mk+1);L(st,'Leitura de Combate: +1 marcador ('+st.mk+'/4).');render()},
  pd2:()=>{const st=ST();st.pd=Math.max(0,st.pd-2);L(st,'Habilidade usada: −2 PD.');render()},
@@ -286,6 +316,7 @@ document.addEventListener('change',ev=>{const t=ev.target,k=t.dataset.c;if(!k)re
 
 /* ---------- render ---------- */
 const $=s=>document.querySelector(s),ov=$('#ov'),mb=$('#mb');
+let rollAnimationTimer;
 const dsel=(cur,at)=>D.map(d=>'<option value="'+d+'"'+(d===cur?' selected':'')+'>d'+d+'</option>').join('');
 const pips=(k,n,cur,cls,ex)=>'<div class="pips">'+Array.from({length:n},(_,i)=>'<div class="pip '+cls+(i<cur?' on':'')+(ex||'')+'" data-a="'+(cls==='pv'||cls==='pd'?'pip':'mkpip')+'" data-k="'+k+'" data-i="'+(i+1)+'"></div>').join('')+'</div>';
 

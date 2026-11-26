@@ -85,7 +85,7 @@ details ul{padding-left:18px;margin:6px 0}
 <body>
 <div class="wrap">
 <header class="top">
-  <div><h1>Ordem Paranormal RPG II — Contos da Vigília</h1><p>Playtest Beta 1.1 · Missão 1: Os Sobreviventes (Ballynyr, Irlanda)</p></div>
+  <div><h1>Ordem Paranormal RPG II — Contos da Vigília</h1><p>Playtest Beta 1.1 · Missão 1: O Pântano dos Afogados</p></div>
   <div class="top-actions"><a class="btn" href="index.html">← Fichas do Playtest Alpha</a></div>
 </header>
 <div class="tabs" id="tabs"></div>
@@ -320,11 +320,6 @@ function sheet(){
   <div class="row sp"><span>Pontos de Vida</span><span><input type="number" value="${st.pv}" data-c="res" data-k="pv"> / <input type="number" value="${st.pvM}" data-c="res" data-k="pvM"></span></div>${pips('pv',st.pvM,st.pv,'pv')}
   <div class="row sp" style="margin-top:12px"><span>Pontos de Determinação</span><span><input type="number" value="${st.pd}" data-c="res" data-k="pd"> / <input type="number" value="${st.pdM}" data-c="res" data-k="pdM"></span></div>${pips('pd',st.pdM,st.pd,'pd')}
   <div class="row sp" style="margin-top:12px"><span>Pontos de armadura</span><input type="number" value="${st.arm}" data-c="res" data-k="arm"></div>
-  <h3>Sofrer dano</h3>
-  <div class="row"><input type="number" id="dv" value="0" min="0"><select id="dk"><option value="f">Físico (PV)</option><option value="e">Emocional (PD)</option></select><label style="font-size:.8rem"><input type="checkbox" id="da" ${st.arm?'':'disabled'}> Gastar armadura (−10)</label><button class="btn sm" data-a="dmg">Aplicar</button></div>
-  <h3>Estado e cenas</h3>
-  <div class="row"><button class="btn sm" data-a="les">Teste de lesão (DT ${7+3*st.les})</button><button class="btn sm" data-a="tbl" data-k="les">Rolar lesão</button><button class="btn sm" data-a="tra">Teste de trauma (DT ${7+3*st.tra})</button><button class="btn sm" data-a="tbl" data-k="tra">Rolar trauma</button></div>
-  <div class="row"><button class="btn sm" data-a="scene">Nova cena</button><button class="btn sm" data-a="mission">Nova missão (relações)</button></div>
  </div>
  <div class="panel"><h2>Dado de Pavor</h2>
   <div class="row sp"><span>${st.pav?'<span class="chip">d'+st.pav+' ativo</span>':'Sem pavor'}</span><button class="btn sm" data-a="pav">${st.pav?'Pavor de novo (+1 passo)':'Receber pavor (d6)'}</button></div>
